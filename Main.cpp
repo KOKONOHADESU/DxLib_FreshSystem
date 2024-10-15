@@ -34,6 +34,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         return -1;
     }
 
+    // ÉTÉEÉìÉh
     {
         Sound::DxLibSoundFresh<int>* sound = new Sound::DxLibSoundFresh<int>("Data/Sound/");
 
@@ -44,6 +45,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         sound->Play(0);
     }
 
+    // CSVì«Ç›çûÇ›
     {
         CSV::CSVReadOnly* csv = new CSV::CSVReadOnly("Data/CSV/");
 
