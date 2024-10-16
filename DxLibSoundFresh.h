@@ -10,7 +10,10 @@
 /// </summary>
 namespace Sound
 {
-    // DxLIbのサウンドシステムを改良する
+    /// <summary>
+    /// DxLIbのサウンドシステムを改良する
+    /// </summary>
+    /// <typeparam name="T">IDを指定する</typeparam>
     template <class T>
     class DxLibSoundFresh
     {
@@ -50,7 +53,7 @@ namespace Sound
         /// <param name="soundName" >パスを指定する                                  </param>
         /// <param name="extension" >サウンドの拡張子を指定する                      </param>
         /// <param name="volume"    >初期ボリュームを指定する...指定しない場合は 255 </param>
-        void Add(T id, const std::string& soundName, const std::string& extension, int volume = 255)
+        void Add(const T& id, const std::string& soundName, const std::string& extension, int volume = 255)
         {
             // 読み込み用ファイルパスを作成
             std::string fileName = m_filePath + soundName + extension;
@@ -65,7 +68,7 @@ namespace Sound
         /// </summary>
         /// <param name="id"    >サウンドのID            </param>
         /// <param name="isLoop">ループ再生させるかどうか</param>
-        void Play(T id, bool isLoop = false)
+        void Play(const T& id, bool isLoop = false)
         {
             if (!isLoop)
             {
@@ -89,7 +92,7 @@ namespace Sound
         /// </summary>
         /// <param name="id"    >サウンドのID                  </param>
         /// <param name="volume">ボリュームを 0～255 で設定する</param>
-        void Volume(T id, int volume)
+        void Volume(const T& id, int volume)
         {
             // ボリュームを変更する
             ChangeVolumeSoundMem(m_soundType[id], volume);

@@ -1,5 +1,5 @@
 #include "DxLibSoundFresh.h"
-#include "CSVReadOnly.h"
+#include "CSVReader.h"
 
 #include <DxLib.h>
 #include <crtdbg.h>
@@ -43,15 +43,17 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         sound->Volume(0,255);
 
         sound->Play(0);
+
     }
 
     // CSVì«Ç›çûÇ›
     {
-        CSV::CSVReadOnly* csv = new CSV::CSVReadOnly("Data/CSV/");
+        CSV::CSVReader<int>* csv = new CSV::CSVReader<int>("Data/CSV/");
 
-        csv->Load("rrr",1);
+        csv->Load(0, "rrr", 1);
 
-        printfDx("%s", csv->StringData(0,1).c_str());
+        printfDx("%s", csv->StringData<std::string>(0, 0, 0).c_str());
+
     }
 
     while (ProcessMessage() == 0)

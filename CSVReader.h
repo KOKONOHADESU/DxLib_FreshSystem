@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 #include <sstream>
 #include <fstream>
 
@@ -17,39 +18,37 @@ namespace
 /// CSV関連
 /// </summary>
 namespace CSV
-{
+{	
 	/// <summary>
 	/// CSVファイル読み込み用
 	/// </summary>
-	class CSVReadOnly
+	/// <typeparam name="T">ID用の型を指定</typeparam>
+	template <class T>
+	class CSVReader
 	{
 	public:
 		/// <summary>
 		/// CSVファイルが存在するパスを指定
 		/// </summary>
-		/// <param name="filePath"></param>
-		CSVReadOnly(const std::string& filePath)
+		/// <param name="filePath"></param>		
+		CSVReader(const std::string& filePath)
 		{
 			m_filePath = filePath;
 		};
 
-		~CSVReadOnly()
+		~CSVReader()
 		{
 			
 		};
-		
-		/// <summary>
-/// 
-/// </summary>
-
 
 		/// <summary>
 		/// CSVファイルの読み込む
 		/// </summary>
+		/// <param name="id"           >IDを指定する              </param>
 		/// <param name="fileName"     >ファイルの名前を指定      </param>
 		/// <param name="ignoreCellNum">無視するセルの数          </param>
 		/// <returns                   >true : 成功 , false : 失敗</returns>
-		bool Load(const std::string& fileName , const int ignoreCellNum)
+		bool Load(const T& id, const std::string& fileName, const int ignoreCellNum)
 		{
 			// ファイルから1文字ずつ読み込む用
 			std::string line;
@@ -78,7 +77,7 @@ namespace CSV
 				// 読み込んだ行をカンマで分割する
 				std::vector<std::string> strvec = Split(line, ',');
 				
-				m_readData.push_back(strvec);
+				m_readData[id].push_back(strvec);
 			}
 
 			// ファイルを閉じる
@@ -86,16 +85,29 @@ namespace CSV
 
 			return true;
 		}
-
+		
 		/// <summary>
 		/// 読み込んだデータの一部を読み込む
 		/// </summary>
-		/// <param name="columns">列を指定(│)</param>
-		/// <param name="row"    >行を指定(─)</param>
-		/// <returns></returns>
-		std::string StringData(const int columns , const int row)
+		/// <typeparam name="U"       >IDを指定    <</typeparam>
+		/// <param name="loadDataType">指定した型  </param>
+		/// <param name="columns"     >列を指定(│)</param>
+		/// <param name="row"         >行を指定(─)</param>
+		/// <returns                  >指定したセルの要素を指定した型で返す/returns>
+		template <typename U>
+		U StringData(const T& id, const int columns, const int row)
 		{
-			return m_readData[columns][row];
+			// 指定した文字列を取得
+			std::stringstream cellStream(m_readData[id][columns][row]);
+
+			// 指定した型の変数を作成
+			U value{};
+
+			// ストリーム演算子を使い指定した型に変換する
+			cellStream >> value;
+
+			// 値を返す
+			return value;
 		}
 
 	private:
@@ -105,7 +117,7 @@ namespace CSV
 		/// <param name="input"    >CSVデータの文字列</param>
 		/// <param name="delimiter">切り抜く際の文字 </param>
 		/// <returns></returns>
-		std::vector<std::string> Split(const std::string& input, char delimiter)
+		std::vector<std::string> Split(const std::string& input, char delimiter) const
 		{
 			// 入力文字列をストリームに変換
 			std::istringstream stream(input);
@@ -131,7 +143,7 @@ namespace CSV
 		std::string m_filePath;
 
 		// 読み込んだデータ
-		std::vector<std::vector<std::string>> m_readData;
+		std::map<T,std::vector<std::vector<std::string>>> m_readData;
 	};
 }
 
