@@ -1,5 +1,6 @@
 #include "DxLibSoundFresh.h"
 #include "CSVReader.h"
+#include "DxLibGraphicFresh.h"
 
 #include <DxLib.h>
 #include <crtdbg.h>
@@ -56,12 +57,18 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
     }
 
+    DxLibGraphicFresh* graph = new DxLibGraphicFresh();
+
+    graph->LoadSoftGrahic("Data/Image/image.png");
+
     while (ProcessMessage() == 0)
     {
         LONGLONG  time = GetNowHiPerformanceCount();
 
         // 画面のクリア
         ClearDrawScreen();
+
+        graph->DrawGraphic();
 
         // 裏画面を表画面を入れ替える
         ScreenFlip();
@@ -77,6 +84,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         {
         }
     }
+
+    graph->EndGrahics();
 
     // ＤＸライブラリ使用の終了処理
     DxLib_End();
