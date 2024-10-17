@@ -18,11 +18,20 @@ namespace Graphic
 	/// <typeparam name="T">どのシーンで画像を読み込むかをしているする型</typeparam>
 	/// <typeparam name="U">画像にIDをつける場合の型                    </typeparam>
 	template <typename T , typename U>
-	class DxLibGraphicFresh
+	class DxLibGraphicFresh final
 	{
 	public:
 		DxLibGraphicFresh() {};
-		~DxLibGraphicFresh() {};
+
+		~DxLibGraphicFresh()
+		{
+			for (int i = 0; i < m_graphData.size(); i++)
+			{
+				// メモリの解放
+				DeleteGraph(m_graphData[i].handle);
+				m_graphData[i].handle = -1;
+			}
+		};
 
 	private:
 		// 画像データ
@@ -88,20 +97,22 @@ namespace Graphic
 		/// 現在のシーンを確認する
 		/// </summary>
 		/// <param name="scene">現在のシーン</param>
-		void SceneInput(T scene)
+		void SceneInput(const T& scene)
 		{
 			// すべての画像データを確認
 			for (int i = 0; i < m_graphData.size(); i++)
-			{
-		
+			{		
 				// 特定の画像データを確認
 				// 画像ロードしていないデータを確認
 				if (m_graphData[i].scene == scene && m_graphData[i].handle == -1)
 				{
 					// 画像のロード
 					m_graphData[i].handle = LoadGraph(m_graphData[i].graphPath.c_str());
+
 					// 読み込み失敗したら
-					if (m_graphData[i].handle == -1)return;				
+					if (m_graphData[i].handle == -1)return;	
+
+					continue;
 				}
 				// 他シーンで使用する画像の場合
 				else if (m_graphData[i].scene != scene && !m_graphData[i].isNoEnd)
@@ -112,6 +123,8 @@ namespace Graphic
 						// メモリの解放
 						DeleteGraph(m_graphData[i].handle);
 						m_graphData[i].handle = -1;
+
+						continue;
 					}
 				}
 			}			
@@ -165,19 +178,6 @@ namespace Graphic
 			}
 
 			return size;
-		}
-
-		/// <summary>
-		/// メモリ解放
-		/// </summary>
-		void EndGrahics()
-		{
-			for (int i = 0; i < m_graphData.size(); i++)
-			{
-				// メモリの解放
-				DeleteGraph(m_graphData[i].handle);
-				m_graphData[i].handle = -1;
-			}
 		}
 
 	private:

@@ -37,13 +37,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
     // サウンド管理
     {
-        Sound::DxLibSoundFresh<int>* sound = new Sound::DxLibSoundFresh<int>("Data/Sound/");
+        Sound::DxLibSoundFresh<int,int>* sound = new Sound::DxLibSoundFresh<int, int>("Data/Sound/");
 
-        sound->Add(0, "Sound1", ".mp3");
+        sound->Add(0,0, "Sound1", ".mp3");
+
+        sound->SceneInput(0);
 
         sound->Volume(0,255);
 
-        sound->Play(0);
+        sound->Play(0,true);
 
     }
 
@@ -68,6 +70,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         graph->GetSize(0);
 
         graph->GetHandle(0);
+
+        DrawGraph(0, 0, graph->GetHandle(0), true);
     }
 
 
@@ -75,6 +79,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     {
         LONGLONG  time = GetNowHiPerformanceCount();
 
+#if false
         // 画面のクリア
         ClearDrawScreen();
 
@@ -86,7 +91,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
         // 裏画面を表画面を入れ替える
         ScreenFlip();
-
+#endif
 
         // escキーを押したら終了する
         if (CheckHitKey(KEY_INPUT_ESCAPE))

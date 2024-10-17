@@ -24,7 +24,7 @@ namespace CSV
 	/// </summary>
 	/// <typeparam name="T">ID—p‚ÌŒ^‚ðŽw’è</typeparam>
 	template <class T>
-	class CSVReader
+	class CSVReader final
 	{
 	public:
 		/// <summary>
