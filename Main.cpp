@@ -55,16 +55,21 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
         printfDx("%s", csv->StringData<std::string>(0, 0, 0).c_str());
 
+    }    
+    
+    // âÊëúä«óù
+    {
+        Graphic::DxLibGraphicFresh<int, int>* graph = new Graphic::DxLibGraphicFresh<int, int>;
+
+        graph->LoadGrahic(0, "Data/Image/a.png", 0);   
+
+        graph->SceneInput(0);
+
+        graph->GetSize(0);
+
+        graph->GetHandle(0);
     }
 
-    Graphic::DxLibGraphicFresh<int, int>* graph = new Graphic::DxLibGraphicFresh<int, int>;
-
-    graph->LoadGrahic(0, "Data/Image/a.png", 0);   
-  
-    bool change = false;
-    int scene = 0;
-
-    int frameCount = 0;
 
     while (ProcessMessage() == 0)
     {
@@ -72,26 +77,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
         // âÊñ ÇÃÉNÉäÉA
         ClearDrawScreen();
-
-        if (change)
-        {
-            graph->SceneInput(0);
-
-            DrawGraph(0, 0, graph->GetHandle(0), true);
-        }
-        else
-        {
-            graph->SceneInput(1);
-
-            DrawGraph(0, 0, graph->GetHandle(0), true);
-        }
-
-        frameCount++;
-        if (frameCount == 60 * 2)
-        {
-            frameCount = 0;
-            change = !change;
-        }
 
 
         
