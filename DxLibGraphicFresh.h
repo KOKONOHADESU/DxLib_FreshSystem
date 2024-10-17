@@ -1,116 +1,189 @@
 #pragma once
 
+#include "Vec2.h"
+
 #include <string>
 #include <vector>
+#include <map>
 #include <DxLib.h>
 
-namespace
+/// <summary>
+/// 画像関連
+/// </summary>
+namespace Graphic
 {
+	/// <summary>
+	/// 画像管理
+	/// </summary>
+	/// <typeparam name="T">どのシーンで画像を読み込むかをしているする型</typeparam>
+	/// <typeparam name="U">画像にIDをつける場合の型                    </typeparam>
+	template <typename T , typename U>
 	class DxLibGraphicFresh
 	{
-	private:
-		struct GrahicData
-		{
-			int handle;
-			bool isSoftData;
-			
-			int sizeX;
-			int sizeY;
-		};
 	public:
 		DxLibGraphicFresh() {};
 		~DxLibGraphicFresh() {};
-	
-		bool LoadSoftGrahic(const std::string& filePath)
+
+	private:
+		// 画像データ
+		struct GrahicData
 		{
-			int image = LoadSoftImage(filePath.c_str());
-			// 画像のサイズを取得
-			int x = 0;
-			int y = 0;
-			GetSoftImageSize(image, &x, &y);
+			U id;                  // ID
+			std::string graphPath; // 画像パス
+			int handle;            // 画像データ
+			Vec2 size;             // 画像サイズ
+			T scene;               // 使用するシーン
+			bool isNoEnd;          // どのシーンでもメモリを解放しない場合
+		};
 
-			GrahicData data
+	public:		
+		/// <summary>
+		/// 画像読み込み
+		/// </summary>
+		/// <param name="id"      >画像ID                        </param>
+		/// <param name="filePath">画像パス                      </param>
+		/// <param name="scene"   >画像を使用するシーン          </param>
+		/// <param name="isNoEnd" >複数のシーンで使用するかどうか</param>
+		/// <returns              >false : 失敗 , true : 成功    </returns>
+		bool LoadGrahic(const U& id ,const std::string& filePath , const T& scene , bool isNoEnd = false)
+		{
+			// データ取得用
+			GrahicData data{};
+
+			// IDの記録
+			data.id = id;
+
+			// 画像パスの記録
+			data.graphPath = filePath;
+
+			// 複数のシーンで画像を使用する場合
+			if (isNoEnd)
 			{
-				image,
-				true,
-				x,
-				y
-			};
+				// 画像のロード
+				data.handle = LoadGraph(filePath.c_str());
+			}
+			else
+			{
+				// ここではまだ画像ロードしない
+				data.handle = -1;
+			}
+		
+			// 使用するシーン
+			data.scene = scene;
 
-			// 画像の読み込み
-			m_handle.push_back(data);
+			// 画像のサイズを取得
+			GetGraphSizeF(data.handle, &data.size.x, &data.size.y);
 
-			// 読み込み失敗したら
-			if (m_handle.back().handle == -1)return false;
+			// 複数のシーンで使用するかどうか
+			data.isNoEnd = isNoEnd;
+
+			// 画像の追加
+			m_graphData.push_back(data);
 
 			// 読み込み成功したら
 			return true;
 		}
 
-		bool LoadGrahic(std::string filePath)
+		/// <summary>
+		/// 現在のシーンを確認する
+		/// </summary>
+		/// <param name="scene">現在のシーン</param>
+		void SceneInput(T scene)
 		{
-			int image = LoadGraph(filePath.c_str());
-			// 画像のサイズを取得
-			int x = 0;
-			int y = 0;
-			GetGraphSize(image, &x, &y);
-
-			GrahicData data
+			// すべての画像データを確認
+			for (int i = 0; i < m_graphData.size(); i++)
 			{
-				image,
-				true,
-				x,
-				y
-			};
-
-
-			// 画像の読み込み
-			m_handle.push_back(data);
-
-			// 読み込み失敗したら
-			if (m_handle.back().handle == -1)return false;
-
-			// 読み込み成功したら
-			return true;
+		
+				// 特定の画像データを確認
+				// 画像ロードしていないデータを確認
+				if (m_graphData[i].scene == scene && m_graphData[i].handle == -1)
+				{
+					// 画像のロード
+					m_graphData[i].handle = LoadGraph(m_graphData[i].graphPath.c_str());
+					// 読み込み失敗したら
+					if (m_graphData[i].handle == -1)return;				
+				}
+				// 他シーンで使用する画像の場合
+				else if (m_graphData[i].scene != scene && !m_graphData[i].isNoEnd)
+				{
+					// 画像データが入っていた場合
+					if (m_graphData[i].handle != -1)
+					{					
+						// メモリの解放
+						DeleteGraph(m_graphData[i].handle);
+						m_graphData[i].handle = -1;
+					}
+				}
+			}			
 		}
 
+		/// <summary>
+		/// 画像ハンドルを渡す
+		/// </summary>
+		/// <param name="id">画像ID        </param>
+		/// <returns        >ハンドルデータ</returns>
+		int GetHandle(const U& id)
+		{
+			int handle = -1;
+
+			// すべての画像を確認
+			for (int i = 0; i < m_graphData.size(); i++)
+			{
+				// 同じIDを探す
+				if (m_graphData[i].id == id)
+				{
+					// 同じIDが見つかったらループを終了
+					handle = m_graphData[i].handle;
+					break;
+				}
+				
+			}
+
+			return handle;
+		}
+
+		/// <summary>
+		/// 画像サイズを渡す
+		/// </summary>
+		/// <param name="id">画像ID      </param>
+		/// <returns        >サイズを渡す</returns>
+		Vec2 GetSize(const U& id)
+		{
+			Vec2 size = Vec2(0.0f,0.0f);
+
+			// すべての画像を確認
+			for (int i = 0; i < m_graphData.size(); i++)
+			{
+				// 同じIDを探す
+				if (m_graphData[i].id == id)
+				{
+					// 同じIDが見つかったらループを終了
+					size = m_graphData[i].size;
+					break;
+				}
+
+			}
+
+			return size;
+		}
+
+		/// <summary>
+		/// メモリ解放
+		/// </summary>
 		void EndGrahics()
 		{
-			for (int i = 0; i < m_handle.size(); i++)
+			for (int i = 0; i < m_graphData.size(); i++)
 			{
-				if(m_handle[i].isSoftData)
-				{
-					DeleteSoftImage(m_handle[i].handle);
-				}
-				else
-				{
-					DeleteGraph(m_handle[i].handle);
-				}
+				// メモリの解放
+				DeleteGraph(m_graphData[i].handle);
+				m_graphData[i].handle = -1;
 			}
-		}
-
-
-		void DrawGraphic()
-		{
-			int r, g, b, a;
-			// 画像の色を１ドットづつ参照して DrawBox で３倍の大きさにして描画
-			for (int i = 0; i < m_handle[0].sizeY; i++)
-			{
-				for (int j = 0; j < m_handle[0].sizeX; j++)
-				{
-					// １ドットの色を取得
-					GetPixelSoftImage(m_handle[0].handle, j, i, &r, &g, &b, &a);
-
-					// DrawBox で描画
-					DrawBox(j * 1, i * 1, j * 1 + 1, i * 1 + 1, GetColor(r, g, b), true);
-				}
-			}
-
-			DrawPixelSoftImage(m_handle[0].handle, 100, 100, 255, 255, 255, 0);
 		}
 
 	private:
-		std::vector<GrahicData> m_handle;
+		// 画像データ				
+		std::vector<GrahicData>m_graphData;
 	};
 }
+
 

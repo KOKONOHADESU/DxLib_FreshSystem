@@ -57,9 +57,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
     }
 
-    DxLibGraphicFresh* graph = new DxLibGraphicFresh();
+    Graphic::DxLibGraphicFresh<int, int>* graph = new Graphic::DxLibGraphicFresh<int, int>;
 
-    graph->LoadSoftGrahic("Data/Image/image.png");
+    graph->LoadGrahic(0, "Data/Image/a.png", 0);   
+  
+    bool change = false;
+    int scene = 0;
+
+    int frameCount = 0;
 
     while (ProcessMessage() == 0)
     {
@@ -68,10 +73,35 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         // 画面のクリア
         ClearDrawScreen();
 
-        graph->DrawGraphic();
+        if (change)
+        {
+            graph->SceneInput(0);
+
+            DrawGraph(0, 0, graph->GetHandle(0), true);
+        }
+        else
+        {
+            graph->SceneInput(1);
+
+            DrawGraph(0, 0, graph->GetHandle(0), true);
+        }
+
+        frameCount++;
+        if (frameCount == 60 * 2)
+        {
+            frameCount = 0;
+            change = !change;
+        }
+
+
+        
+
+
+
 
         // 裏画面を表画面を入れ替える
         ScreenFlip();
+
 
         // escキーを押したら終了する
         if (CheckHitKey(KEY_INPUT_ESCAPE))
@@ -84,8 +114,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         {
         }
     }
-
-    graph->EndGrahics();
 
     // ＤＸライブラリ使用の終了処理
     DxLib_End();
