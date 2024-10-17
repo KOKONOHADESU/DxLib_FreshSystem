@@ -13,17 +13,22 @@ namespace Sound
     /// <summary>
     /// DxLIbのサウンドシステムを改良する
     /// </summary>
-    /// <typeparam name="T">IDを指定する</typeparam>
-    template <class T>
+    /// <typeparam name="T">どのシーンで画像を読み込むかをしているする型</typeparam>
+    /// <typeparam name="U">画像にIDをつける場合の型                    </typeparam>
+    template <typename T, typename U>
     class DxLibSoundFresh
     {
     private:
         // サウンド再生に必要なデータ
         struct SoundData
         {
+            U id;                  // ID
+            T scene;               // 使用するシーン
+            int handle;            // ハンドル
             std::string filePath;  // ファイルパス
             std::string extension; // 拡張子
             int volume;            // 音量
+            bool isNoEnd;          // どのシーンでもメモリを解放しない場合
         };
 
     public:
@@ -53,10 +58,26 @@ namespace Sound
         /// <param name="soundName" >パスを指定する                                  </param>
         /// <param name="extension" >サウンドの拡張子を指定する                      </param>
         /// <param name="volume"    >初期ボリュームを指定する...指定しない場合は 255 </param>
-        void Add(const T& id, const std::string& soundName, const std::string& extension, int volume = 255)
+        void Add(const T& id, const T& scene, const std::string& soundName, const std::string& extension, int volume = 255 , bool isNoEnd = false)
         {
+
+            SoundData data{};
+
+            // 
+            data.id = id;
+
+            //
+            data.scene = scene;
+
+            //
+            data.handle = -1;
+            
             // 読み込み用ファイルパスを作成
-            std::string fileName = m_filePath + soundName + extension;
+            data.filePath = m_filePath + soundName + extension;
+
+            data.volume = volume;
+
+            
             // サウンドの読み込み
             m_soundType[id] = LoadSoundMem(fileName.c_str());
             // 初期状態のボリューム調整
@@ -101,7 +122,7 @@ namespace Sound
     private:
 
         // サウンドデータを管理する
-        std::map<T, int> m_soundType;
+        std::vector<SoundData> m_soundType;
 
         // ファイルパス記録
         std::string m_filePath;
