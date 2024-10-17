@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SingletonBase.h"
+
 #include <vector>
 #include <string>
 #include <map>
@@ -24,22 +26,26 @@ namespace CSV
 	/// </summary>
 	/// <typeparam name="T">ID用の型を指定</typeparam>
 	template <class T>
-	class CSVReader final
+	class CSVReader : public SingletonBase<CSVReader<T>>
 	{
 	public:
-		/// <summary>
-		/// CSVファイルが存在するパスを指定
-		/// </summary>
-		/// <param name="filePath"></param>		
-		CSVReader(const std::string& filePath)
-		{
-			m_filePath = filePath;
-		};
+		// SingletonBaseクラスのアクセスを許可する
+		friend class SingletonBase<CSVReader<T>>;
 
-		~CSVReader()
+	private:
+		CSVReader(){};
+
+	public:
+		~CSVReader(){};
+
+		/// <summary>
+		/// 画像がある階層のフォルダーを指定
+		/// </summary>
+		/// <param name="grahicFolderPath"></param>
+		void CSVFolderPath(const char* grahicFolderPath)
 		{
-			
-		};
+			m_filePath = grahicFolderPath;
+		}
 
 		/// <summary>
 		/// CSVファイルの読み込む
@@ -48,7 +54,7 @@ namespace CSV
 		/// <param name="fileName"     >ファイルの名前を指定      </param>
 		/// <param name="ignoreCellNum">無視するセルの数          </param>
 		/// <returns                   >true : 成功 , false : 失敗</returns>
-		bool Load(const T& id, const std::string& fileName, const int ignoreCellNum)
+		bool Load(const T& id, const char* fileName, const int ignoreCellNum)
 		{
 			// ファイルから1文字ずつ読み込む用
 			std::string line;

@@ -5,6 +5,10 @@
 #include <DxLib.h>
 #include <crtdbg.h>
 
+using DxSound   = Sound::DxLibSoundFresh<int, int>;
+using CSVReader = CSV::CSVReader<int>;
+using DxGraph   = Graphic::DxLibGraphicFresh<int, int>;
+
 // プログラムはWinMainから始まります
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
@@ -35,45 +39,24 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         return -1;
     }
 
-    // サウンド管理
-    {
-        Sound::DxLibSoundFresh<int,int>* sound = new Sound::DxLibSoundFresh<int, int>("Data/Sound/");
+    // サウンド管理 //
+    DxSound::GetInstance()->SoundFolderPath("Data/Sound/");
+    DxSound::GetInstance()->Add(0, 0, "Sound1", ".mp3");
+    DxSound::GetInstance()->SceneInput(0);
+    DxSound::GetInstance()->Volume(0, 255);
+    DxSound::GetInstance()->Play(0);
 
-        sound->Add(0,0, "Sound1", ".mp3");
+    // CSV読み込み //
+    CSVReader::GetInstance()->CSVFolderPath("Data/CSV/");
+    CSVReader::GetInstance()->Load(0, "rrr", 1);
+    printfDx("%s", CSVReader::GetInstance()->StringData<std::string>(0, 0, 0).c_str());
 
-        sound->SceneInput(0);
-
-        sound->Volume(0,255);
-
-        sound->Play(0,true);
-
-    }
-
-    // CSV読み込み
-    {
-        CSV::CSVReader<int>* csv = new CSV::CSVReader<int>("Data/CSV/");
-
-        csv->Load(0, "rrr", 1);
-
-        printfDx("%s", csv->StringData<std::string>(0, 0, 0).c_str());
-
-    }    
-    
-    // 画像管理
-    {
-        Graphic::DxLibGraphicFresh<int, int>* graph = new Graphic::DxLibGraphicFresh<int, int>;
-
-        graph->LoadGrahic(0, "Data/Image/a.png", 0);   
-
-        graph->SceneInput(0);
-
-        graph->GetSize(0);
-
-        graph->GetHandle(0);
-
-        DrawGraph(0, 0, graph->GetHandle(0), true);
-    }
-
+    // 画像管理 //
+    DxGraph::GetInstance()->GraphicFolderPath("Data/Image/");
+    DxGraph::GetInstance()->Add(0, "a.png", 0);
+    DxGraph::GetInstance()->GetSize(0);
+    DxGraph::GetInstance()->SceneInput(0);
+    DrawGraph(0, 0, DxGraph::GetInstance()->GetHandle(0), true);
 
     while (ProcessMessage() == 0)
     {
@@ -81,10 +64,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
 #if false
         // 画面のクリア
+
         ClearDrawScreen();
 
-
-        
 
 
 
@@ -104,6 +86,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         {
         }
     }
+
+    // メモリ解放
+    Sound::DxLibSoundFresh<int, int>::GetInstance()->Destroy();
+    CSV::CSVReader<int>::GetInstance()->Destroy();
+    Graphic::DxLibGraphicFresh<int, int>::GetInstance()->Destroy();
 
     // ＤＸライブラリ使用の終了処理
     DxLib_End();

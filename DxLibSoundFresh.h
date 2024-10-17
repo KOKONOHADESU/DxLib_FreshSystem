@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SingletonBase.h"
+
 #include <vector>
 #include <string>
 #include <DxLib.h>
@@ -16,7 +18,7 @@ namespace Sound
     /// <typeparam name="T">どのシーンで画像を読み込むかをしているする型</typeparam>
     /// <typeparam name="U">画像にIDをつける場合の型                    </typeparam>
     template <typename T, typename U>
-    class DxLibSoundFresh final
+    class DxLibSoundFresh : public SingletonBase<DxLibSoundFresh<T,U>>
     {
     private:
         // サウンド再生に必要なデータ
@@ -31,23 +33,30 @@ namespace Sound
         };
 
     public:
-        /// <summary>
-        /// コンストラクタの引数でファイルパスを指定する
-        /// </summary>
-        /// <param name="filePath">ファイルパス</param>
-        DxLibSoundFresh(const std::string& filePath = ""):
-            m_filePath(filePath)
-        {                       
-        };
+        // SingletonBaseクラスのアクセスを許可する
+        friend class SingletonBase<DxLibSoundFresh<T, U>>;
 
+    private:
+        DxLibSoundFresh(){};
+
+    public:
         ~DxLibSoundFresh()
         {
             // メモリ解放
             for (int i = 0; i < static_cast<int>(m_soundType.size()); i++)
             {
-                DeleteSoundMem(m_soundType[i]);
+                DeleteSoundMem(m_soundType[i].handle);
             }
         };
+
+        /// <summary>
+        /// 画像がある階層のフォルダーを指定
+        /// </summary>
+        /// <param name="grahicFolderPath"></param>
+        void SoundFolderPath(const char* grahicFolderPath)
+        {
+            m_filePath = grahicFolderPath;
+        }
         
         /// <summary>
         /// サウンドを追加する
@@ -58,7 +67,7 @@ namespace Sound
         /// <param name="extension" >サウンドの拡張子を指定する                      </param>
         /// <param name="volume"    >初期ボリュームを指定する...指定しない場合は 255 </param>
         /// <param name="isNoEnd"   >すべてのシーンで使用するかどうか                </param>
-        void Add(const T& id, const T& scene, const std::string& soundName, const std::string& extension, int volume = 255 , bool isNoEnd = false)
+        void Add(const T& id, const T& scene, const char* soundName, const char* extension, int volume = 255 , bool isNoEnd = false)
         {
             SoundData data{};
 
@@ -187,6 +196,6 @@ namespace Sound
         std::vector<SoundData> m_soundType;
 
         // ファイルパス記録
-        const std::string m_filePath;
+        std::string m_filePath;
     };
 }

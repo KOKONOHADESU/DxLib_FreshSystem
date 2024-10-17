@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SingletonBase.h"
+
 #include "Vec2.h"
 
 #include <string>
@@ -18,21 +20,8 @@ namespace Graphic
 	/// <typeparam name="T">どのシーンで画像を読み込むかをしているする型</typeparam>
 	/// <typeparam name="U">画像にIDをつける場合の型                    </typeparam>
 	template <typename T , typename U>
-	class DxLibGraphicFresh final
+	class DxLibGraphicFresh : public SingletonBase<DxLibGraphicFresh<T, U>>
 	{
-	public:
-		DxLibGraphicFresh() {};
-
-		~DxLibGraphicFresh()
-		{
-			for (int i = 0; i < m_graphData.size(); i++)
-			{
-				// メモリの解放
-				DeleteGraph(m_graphData[i].handle);
-				m_graphData[i].handle = -1;
-			}
-		};
-
 	private:
 		// 画像データ
 		struct GrahicData
@@ -45,7 +34,34 @@ namespace Graphic
 			bool isNoEnd;          // どのシーンでもメモリを解放しない場合
 		};
 
+	public:
+		// SingletonBaseクラスのアクセスを許可する
+		friend class SingletonBase<DxLibGraphicFresh<T, U>>;
+
+	private:
+		DxLibGraphicFresh() {};
+
+	public:
+		~DxLibGraphicFresh()
+		{
+			for (int i = 0; i < m_graphData.size(); i++)
+			{
+				// メモリの解放
+				DeleteGraph(m_graphData[i].handle);
+				m_graphData[i].handle = -1;
+			}
+		};
+
 	public:		
+		/// <summary>
+		/// 画像がある階層のフォルダーを指定
+		/// </summary>
+		/// <param name="grahicFolderPath"></param>
+		void GraphicFolderPath(const char* grahicFolderPath)
+		{
+			m_filePath = grahicFolderPath;
+		}
+
 		/// <summary>
 		/// 画像読み込み
 		/// </summary>
@@ -54,7 +70,7 @@ namespace Graphic
 		/// <param name="scene"   >画像を使用するシーン          </param>
 		/// <param name="isNoEnd" >複数のシーンで使用するかどうか</param>
 		/// <returns              >false : 失敗 , true : 成功    </returns>
-		bool LoadGrahic(const U& id ,const std::string& filePath , const T& scene , bool isNoEnd = false)
+		bool Add(const U& id , const char* filePath , const T& scene , bool isNoEnd = false)
 		{
 			// データ取得用
 			GrahicData data{};
@@ -63,13 +79,13 @@ namespace Graphic
 			data.id = id;
 
 			// 画像パスの記録
-			data.graphPath = filePath;
+			data.graphPath = m_filePath + filePath;
 
 			// 複数のシーンで画像を使用する場合
 			if (isNoEnd)
 			{
 				// 画像のロード
-				data.handle = LoadGraph(filePath.c_str());
+				data.handle = LoadGraph(data.graphPath.c_str());
 			}
 			else
 			{
@@ -183,6 +199,9 @@ namespace Graphic
 	private:
 		// 画像データ				
 		std::vector<GrahicData>m_graphData;
+
+		// ファイルパス記録
+		std::string m_filePath;
 	};
 }
 

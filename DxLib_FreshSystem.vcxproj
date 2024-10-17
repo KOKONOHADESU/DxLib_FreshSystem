@@ -149,6 +149,7 @@
     <ClInclude Include="CSVReader.h" />
     <ClInclude Include="DxLibGraphicFresh.h" />
     <ClInclude Include="DxLibSoundFresh.h" />
+    <ClInclude Include="SingletonBase.h" />
     <ClInclude Include="Vec2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
