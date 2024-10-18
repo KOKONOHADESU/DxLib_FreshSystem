@@ -2,6 +2,7 @@
 #include "FreshLib/DxLibGraphicFresh.h"
 #include "FreshLib/DxLibKeyFresh.h"
 #include "FreshLib/DxLibMouseFresh.h"
+#include "FreshLib/DxLibFontFresh.h"
 #include "FreshLib/CSVReader.h"
 #include "FreshLib/CSVWriter.h"
 #include "FreshLib/MTRandom.h"
@@ -16,6 +17,7 @@ using DxMouse   = Mouse::DxLibMouseFresh;
 using CSVReader = CSV::CSVReader<int,int>;
 using CSVWriter = CSV::CSVWriter;
 using MTRand    = Rand::MTRandom;
+using DxFont    = Font::DxLibFontFresh<int, int>;
 
 // プログラムはWinMainから始まります
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
@@ -78,12 +80,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     CSVWriter::GetInstance()->CSVFolderPath("Data/CSV/");
     CSVWriter::GetInstance()->Write("SaveData", data);
 
-    // フォントデータの読み込み
- //   AddFontResourceEx("Data/Font/NikkyouSans-mLKax.ttf", FR_PRIVATE, NULL);
-    int FontHandle = CreateFontToHandle("Nikkyou Sans", 40, 3, DX_FONTTYPE_NORMAL, DX_CHARSET_DEFAULT);
+    DxFont::GetInstance()->FontFolderPath("Data/Font/");
+    DxFont::GetInstance()->Add(0, 0, "NikkyouSans-mLKax", ".ttf", "Nikkyou Sans");
+    DxFont::GetInstance()->SceneInput(0);
     
     bool isButton = false;
     float rand = -1;
+
+    int count = 0;
     while (ProcessMessage() == 0)
     {
         LONGLONG  time = GetNowHiPerformanceCount();
@@ -98,7 +102,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         if (DxKey::GetInstance()->IsTrigger(KEY_INPUT_Z))
         {
             isButton = !isButton;
-            rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);
+            rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);            
         }
         if (DxMouse::GetInstance()->IsTrigger(MOUSE_INPUT_1))
         {
@@ -106,9 +110,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
             rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);
         }
 
+        if (count++ > 60 * 1)
+        {
+            count = 0;
+            DxSound::GetInstance()->Play(0);
+        }
+
         DxSound::GetInstance()->SceneInput(isButton);
         DxGraph::GetInstance()->SceneInput(isButton);        
         CSVReader::GetInstance()->SceneInput(isButton);
+        DxSound::GetInstance()->SceneInput(isButton);
 
         DrawGraph(0, 0, DxGraph::GetInstance()->GetHandle(0), true);
 
@@ -118,7 +129,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         DrawFormatString(0, 48, 0xffffff, "MTRand = %f", rand);
 
         DrawString(0, 64, "123456789011", GetColor(255, 0, 0));
-        DrawStringToHandle(0, 80, "123456789011", GetColor(255, 255, 0), FontHandle);
+        DrawStringToHandle(0, 80, "123456789011", GetColor(255, 255, 0), DxFont::GetInstance()->GetHandle(0));
 
 #endif
         // 裏画面を表画面を入れ替える
@@ -137,9 +148,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     }
 
     // メモリ解放
-    Sound::DxLibSoundFresh<int, int>::GetInstance()->Destroy();
-    CSV::CSVReader<int, int>::GetInstance()->Destroy();
-    Graphic::DxLibGraphicFresh<int, int>::GetInstance()->Destroy();
+    DxSound  ::GetInstance()->Destroy();
+    DxGraph  ::GetInstance()->Destroy();
+    DxKey    ::GetInstance()->Destroy();
+    DxMouse  ::GetInstance()->Destroy();
+    CSVReader::GetInstance()->Destroy();
+    CSVWriter::GetInstance()->Destroy();
+    MTRand   ::GetInstance()->Destroy();
+    DxFont   ::GetInstance()->Destroy();    
 
     // ＤＸライブラリ使用の終了処理
     DxLib_End();

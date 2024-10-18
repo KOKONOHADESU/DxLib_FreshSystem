@@ -15,8 +15,8 @@ namespace Sound
     /// <summary>
     /// DxLIbのサウンドシステムを改良する
     /// </summary>
-    /// <typeparam name="T">どのシーンで画像を読み込むかをしているする型</typeparam>
-    /// <typeparam name="U">画像にIDをつける場合の型                    </typeparam>
+    /// <typeparam name="T">画像にIDをつける場合の型                    </typeparam>
+    /// <typeparam name="U">どのシーンで画像を読み込むかをしているする型</typeparam>
     template <typename T, typename U>
     class DxLibSoundFresh : public SingletonBase<DxLibSoundFresh<T,U>>
     {
@@ -24,8 +24,8 @@ namespace Sound
         // サウンド再生に必要なデータ
         struct SoundData
         {
-            U id;                  // ID
-            T scene;               // 使用するシーン
+            T id;                  // ID
+            U scene;               // 使用するシーン
             int handle;            // ハンドル
             std::string filePath;  // ファイルパス
             int volume;            // 音量
@@ -67,7 +67,7 @@ namespace Sound
         /// <param name="extension" >サウンドの拡張子を指定する                      </param>
         /// <param name="volume"    >初期ボリュームを指定する...指定しない場合は 255 </param>
         /// <param name="isNoEnd"   >すべてのシーンで使用するかどうか                </param>
-        void Add(const T& id, const T& scene, const char* soundName, const char* extension, int volume = 255 , bool isNoEnd = false)
+        void Add(const T& id, const U& scene, const char* soundName, const char* extension, int volume = 255 , bool isNoEnd = false)
         {
             SoundData data{};
 
