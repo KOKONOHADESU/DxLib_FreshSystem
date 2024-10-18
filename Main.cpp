@@ -1,13 +1,15 @@
 #include "DxLibSoundFresh.h"
 #include "CSVReader.h"
 #include "DxLibGraphicFresh.h"
+#include "CSVWriter.h"
 
 #include <DxLib.h>
 #include <crtdbg.h>
 
 using DxSound   = Sound::DxLibSoundFresh<int, int>;
-using CSVReader = CSV::CSVReader<int>;
 using DxGraph   = Graphic::DxLibGraphicFresh<int, int>;
+using CSVReader = CSV::CSVReader<int,int>;
+using CSVWriter = CSV::CSVWriter;
 
 // プログラムはWinMainから始まります
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
@@ -46,17 +48,29 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     DxSound::GetInstance()->Volume(0, 255);
     DxSound::GetInstance()->Play(0);
 
-    // CSV読み込み //
-    CSVReader::GetInstance()->CSVFolderPath("Data/CSV/");
-    CSVReader::GetInstance()->Load(0, "rrr", 1);
-    printfDx("%s", CSVReader::GetInstance()->StringData<std::string>(0, 0, 0).c_str());
-
     // 画像管理 //
     DxGraph::GetInstance()->GraphicFolderPath("Data/Image/");
-    DxGraph::GetInstance()->Add(0, "a.png", 0);
+    DxGraph::GetInstance()->Add(0, 0, "a", ".png");
     DxGraph::GetInstance()->GetSize(0);
     DxGraph::GetInstance()->SceneInput(0);
     DrawGraph(0, 0, DxGraph::GetInstance()->GetHandle(0), true);
+
+    // CSV読み込み //
+    CSVReader::GetInstance()->CSVFolderPath("Data/CSV/");
+    CSVReader::GetInstance()->Add(0,0, "rrr", 1);
+    CSVReader::GetInstance()->Add(1,0, "SaveData", 1);
+    CSVReader::GetInstance()->SceneInput(0);
+    printfDx("rrr = %s\n", CSVReader::GetInstance()->StringData<std::string>(0, 0, 0).c_str());
+    printfDx("SaveData = %s\n", CSVReader::GetInstance()->StringData<std::string>(1, 0, 0).c_str());
+
+    // CSV書き込み //
+    std::vector<std::vector<std::string>> data =
+    {
+        {"名前,最終地点,体力"},
+        {"name,japan,32"}
+    };
+    CSVWriter::GetInstance()->CSVFolderPath("Data/CSV/");
+    CSVWriter::GetInstance()->Write("SaveData", data);
 
     while (ProcessMessage() == 0)
     {
@@ -89,7 +103,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
     // メモリ解放
     Sound::DxLibSoundFresh<int, int>::GetInstance()->Destroy();
-    CSV::CSVReader<int>::GetInstance()->Destroy();
+    CSV::CSVReader<int, int>::GetInstance()->Destroy();
     Graphic::DxLibGraphicFresh<int, int>::GetInstance()->Destroy();
 
     // ＤＸライブラリ使用の終了処理

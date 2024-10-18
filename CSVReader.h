@@ -1,20 +1,12 @@
 #pragma once
 
 #include "SingletonBase.h"
+#include "CSVCommon.h"
 
 #include <vector>
-#include <string>
 #include <map>
 #include <sstream>
 #include <fstream>
-
-#include <DxLib.h>
-
-namespace
-{
-	// 拡張子
-	const std::string kExtension = ".csv";
-}
 
 /// <summary>
 /// CSV関連
@@ -25,12 +17,26 @@ namespace CSV
 	/// CSVファイル読み込み用
 	/// </summary>
 	/// <typeparam name="T">ID用の型を指定</typeparam>
-	template <class T>
-	class CSVReader : public SingletonBase<CSVReader<T>>
+	/// <typeparam name="U">どのシーンで画像を読み込むかをしているする型</typeparam>
+	template <typename T, typename U>
+	class CSVReader : public SingletonBase<CSVReader<T, U>>
 	{
+	private:
+		/// <summary>
+		/// 読み込み用データ
+		/// </summary>
+		struct readerData
+		{
+			T id;                                             // ID
+			U scene;                                          // シーン	
+			std::string filePath;                             // パス
+			std::vector<std::vector<std::string>> stringData; // CSVから読み込んだ文字
+			int ignoreCellNum;                                // 無視するセル
+			bool isNoEnd;                                     // どのシーンでも使用する場合
+		};
 	public:
 		// SingletonBaseクラスのアクセスを許可する
-		friend class SingletonBase<CSVReader<T>>;
+		friend class SingletonBase<CSVReader<T, U>>;
 
 	private:
 		CSVReader(){};
@@ -50,28 +56,97 @@ namespace CSV
 		/// <summary>
 		/// CSVファイルの読み込む
 		/// </summary>
-		/// <param name="id"           >IDを指定する              </param>
-		/// <param name="fileName"     >ファイルの名前を指定      </param>
-		/// <param name="ignoreCellNum">無視するセルの数          </param>
-		/// <returns                   >true : 成功 , false : 失敗</returns>
-		bool Load(const T& id, const char* fileName, const int ignoreCellNum)
+		/// <param name="id"           >IDを指定する                </param>
+		/// <param name="scene"        >使用するシーンの型          </param>
+		/// <param name="fileName"     >ファイルの名前を指定        </param>
+		/// <param name="ignoreCellNum">無視するセルの数            </param>
+		/// <param name="isNoEnd"      >他のシーンで使用するかどうか</param>
+		void Add(const T& id, const U& scene, const char* fileName, const int ignoreCellNum, bool isNoEnd = false)
+		{
+			readerData data{};
+
+			// ID
+			data.id = id;
+
+			// 使用するシーン
+			data.scene = scene;
+
+			// ファイルパス
+			data.filePath = m_filePath + fileName + kExtension;
+
+			// すべてのシーンで使用するかどうか
+			if (isNoEnd)
+			{				
+				// 読み込み
+				data.stringData = Read(data.filePath.c_str(), ignoreCellNum);
+			}
+			else
+			{
+				// 読み込まない
+				data.stringData = { {""} };
+			}
+
+			// 無視するセル
+			data.ignoreCellNum = ignoreCellNum;
+
+			// すべてのシーンで使用するかどうか
+			data.isNoEnd = isNoEnd;			
+
+			// データの追加
+			m_readData.push_back(data);
+		}
+
+		/// <summary>
+		/// 現在のシーンを確認する
+		/// </summary>
+		/// <param name="scene">現在のシーン</param>
+		void SceneInput(const U& scene)
+		{
+			// すべてのデータを確認
+			for (int i = 0; i < m_readData.size(); i++)
+			{				
+				// 現在のシーンで使用するかどうか
+				if (m_readData[i].scene == scene)
+				{
+					// ロード
+					m_readData[i].stringData = Read(m_readData[i].filePath.c_str(), m_readData[i].ignoreCellNum);
+
+					continue;
+				}
+				// 他シーンで使用する場合
+				else if (m_readData[i].scene != scene && !m_readData[i].isNoEnd)
+				{									
+					m_readData[i].stringData = { {""} };
+
+					continue;				
+				}
+			}
+		}
+
+		/// <summary>
+		/// CSVファイルを読み込んで渡す
+		/// </summary>
+		/// <param name="fileName"     >ファイル名             </param>
+		/// <param name="ignoreCellNum">無視するセル           </param>
+		/// <returns                   >CSVから読み込んだ文字列</returns>
+		std::vector<std::vector<std::string>> Read(const char* fileName, int ignoreCellNum)
 		{
 			// ファイルから1文字ずつ読み込む用
 			std::string line;
 
-			std::string	filePath = m_filePath + fileName + kExtension;
-
 			// ファイル読み込み用
-			std::ifstream ifs(filePath.c_str());
+			std::ifstream ifs(fileName);
 
 			// ファイルが開けない場合
 			if (!ifs)
 			{
-				return false;
+				
 			}
 
 			// 無視するセルをカウントする
 			int ignoreCellCount = 0;
+
+			std::vector<std::vector<std::string>> string;
 
 			// 読み込み開始
 			while (getline(ifs, line))
@@ -82,14 +157,15 @@ namespace CSV
 
 				// 読み込んだ行をカンマで分割する
 				std::vector<std::string> strvec = Split(line, ',');
-				
-				m_readData[id].push_back(strvec);
+
+				// データを記録
+				string.push_back(strvec);
 			}
 
 			// ファイルを閉じる
 			ifs.close();
 
-			return true;
+			return string;
 		}
 		
 		/// <summary>
@@ -100,14 +176,28 @@ namespace CSV
 		/// <param name="columns"     >列を指定(│)</param>
 		/// <param name="row"         >行を指定(─)</param>
 		/// <returns                  >指定したセルの要素を指定した型で返す/returns>
-		template <typename U>
-		U StringData(const T& id, const int columns, const int row)
+		template <typename V>
+		V StringData(const T& id, const int columns, const int row)
 		{
-			// 指定した文字列を取得
-			std::stringstream cellStream(m_readData[id][columns][row]);
+			std::stringstream cellStream{};
+
+			// すべての確認
+			for (int i = 0; i < m_readData.size(); i++)
+			{
+				// 使用するシーンを確認
+				if (m_readData[i].id == id)
+				{
+					// 指定のセルから文字列を確認
+					std::string data = m_readData[i].stringData[row][columns];
+					// ストリームにデータを挿入
+					cellStream << data; 
+
+					break;
+				}
+			}
 
 			// 指定した型の変数を作成
-			U value{};
+			V value{};
 
 			// ストリーム演算子を使い指定した型に変換する
 			cellStream >> value;
@@ -115,6 +205,8 @@ namespace CSV
 			// 値を返す
 			return value;
 		}
+
+
 
 	private:
 		/// <summary>
@@ -149,7 +241,7 @@ namespace CSV
 		std::string m_filePath;
 
 		// 読み込んだデータ
-		std::map<T,std::vector<std::vector<std::string>>> m_readData;
+		std::vector<readerData> m_readData;
 	};
 }
 

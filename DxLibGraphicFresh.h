@@ -65,12 +65,13 @@ namespace Graphic
 		/// <summary>
 		/// 画像読み込み
 		/// </summary>
-		/// <param name="id"      >画像ID                        </param>
-		/// <param name="filePath">画像パス                      </param>
-		/// <param name="scene"   >画像を使用するシーン          </param>
-		/// <param name="isNoEnd" >複数のシーンで使用するかどうか</param>
-		/// <returns              >false : 失敗 , true : 成功    </returns>
-		bool Add(const U& id , const char* filePath , const T& scene , bool isNoEnd = false)
+		/// <param name="id"       >画像ID                        </param>
+		/// <param name="scene"    >画像を使用するシーン          </param>
+		/// <param name="filePath" >画像パス                      </param>
+		/// <param name="extension">拡張子                        </param>
+		/// <param name="isNoEnd"  >複数のシーンで使用するかどうか</param>
+		/// <returns               >false : 失敗 , true : 成功    </returns>
+		bool Add(const U& id, const T& scene, const char* filePath, const char* extension, bool isNoEnd = false)
 		{
 			// データ取得用
 			GrahicData data{};
@@ -79,7 +80,7 @@ namespace Graphic
 			data.id = id;
 
 			// 画像パスの記録
-			data.graphPath = m_filePath + filePath;
+			data.graphPath = m_filePath + filePath + extension;
 
 			// 複数のシーンで画像を使用する場合
 			if (isNoEnd)
