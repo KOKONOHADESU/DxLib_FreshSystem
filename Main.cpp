@@ -1,7 +1,7 @@
-#include "DxLibSoundFresh.h"
-#include "CSVReader.h"
-#include "DxLibGraphicFresh.h"
-#include "CSVWriter.h"
+#include "DxFresh/DxLibSoundFresh.h"
+#include "DxFresh/CSVReader.h"
+#include "DxFresh/DxLibGraphicFresh.h"
+#include "DxFresh/CSVWriter.h"
 
 #include <DxLib.h>
 #include <crtdbg.h>
