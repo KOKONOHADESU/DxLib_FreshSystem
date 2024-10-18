@@ -4,11 +4,13 @@
 #include<cmath>
 
 //2éüå≥ÉxÉNÉgÉã
+
+template <class T>
 class Vec2
 {
 public:
-	float x;
-	float y;
+	T x;
+	T y;
 
 public:
 	Vec2():
@@ -17,7 +19,7 @@ public:
 	{
 
 	}
-	Vec2(float posX, float posY)
+	Vec2(T posX, T posY)
 	{
 		x = posX;
 		y = posY;
@@ -52,35 +54,35 @@ public:
 	}
 
 	//Vec2 = (Vec2 *= Vec2)
-	Vec2 operator*=(float scale)
+	Vec2 operator*=(T scale)
 	{
 		x *= scale;
 		y *= scale;
 		return *this;
 	}
 	//Vec2 = Vec2 + float
-	Vec2 operator*(float scale)const
+	Vec2 operator*(T scale)const
 	{
 		Vec2 temp{ x * scale, y * scale };
 		return temp;
 	}
 
 	//Vec2 = (Vec2 /= Vec2)
-	Vec2 operator/=(float scale)
+	Vec2 operator/=(T scale)
 	{
 		x /= scale;
 		y /= scale;
 		return *this;
 	}
 	//Vec2 = Vec2 / float
-	Vec2 operator/(float scale)const
+	Vec2 operator/(T scale)const
 	{
 		Vec2 temp{ x / scale, y / scale };
 		return temp;
 	}
 
 	//í∑Ç≥ÇÃéÊìæ
-	float Length()
+	T Length()
 	{
 		return sqrtf((x * x) + (y * y));
 	}
@@ -88,7 +90,7 @@ public:
 	//ê≥ãKâª Vec2 = Vec2.normalize()
 	Vec2 Normalize()
 	{
-		float len = Length();
+		T len = Length();
 		if (len == 0)
 		{
 			return *this;

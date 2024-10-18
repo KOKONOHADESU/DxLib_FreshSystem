@@ -41,6 +41,12 @@
     <ClInclude Include="DxFresh\Vec2.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="DxFresh\DxLibKeyFresh.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="DxFresh\DxLibMouseFresh.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DxFresh\DxLib_FreshSystem.vcxproj.user" />

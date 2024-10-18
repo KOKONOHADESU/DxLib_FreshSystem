@@ -150,9 +150,11 @@
     <ClInclude Include="DxFresh\CSVReader.h" />
     <ClInclude Include="DxFresh\CSVWriter.h" />
     <ClInclude Include="DxFresh\DxLibGraphicFresh.h" />
+    <ClInclude Include="DxFresh\DxLibKeyFresh.h" />
     <ClInclude Include="DxFresh\DxLibSoundFresh.h" />
     <ClInclude Include="DxFresh\SingletonBase.h" />
     <ClInclude Include="DxFresh\Vec2.h" />
+    <ClInclude Include="DxFresh\DxLibMouseFresh.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DxFresh\DxLib_FreshSystem.vcxproj.user" />

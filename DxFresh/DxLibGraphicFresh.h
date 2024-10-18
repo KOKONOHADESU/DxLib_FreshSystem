@@ -29,7 +29,7 @@ namespace Graphic
 			U id;                  // ID
 			std::string graphPath; // 画像パス
 			int handle;            // 画像データ
-			Vec2 size;             // 画像サイズ
+			Vec2<float> size;      // 画像サイズ
 			T scene;               // 使用するシーン
 			bool isNoEnd;          // どのシーンでもメモリを解放しない場合
 		};
@@ -177,9 +177,9 @@ namespace Graphic
 		/// </summary>
 		/// <param name="id">画像ID      </param>
 		/// <returns        >サイズを渡す</returns>
-		Vec2 GetSize(const U& id)
+		Vec2<float> GetSize(const U& id)
 		{
-			Vec2 size = Vec2(0.0f,0.0f);
+			Vec2<float> size = Vec2<float>(0.0f,0.0f);
 
 			// すべての画像を確認
 			for (int i = 0; i < m_graphData.size(); i++)

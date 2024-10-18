@@ -1,6 +1,8 @@
 #include "DxFresh/DxLibSoundFresh.h"
-#include "DxFresh/CSVReader.h"
 #include "DxFresh/DxLibGraphicFresh.h"
+#include "DxFresh/DxLibKeyFresh.h"
+#include "DxFresh/DxLibMouseFresh.h"
+#include "DxFresh/CSVReader.h"
 #include "DxFresh/CSVWriter.h"
 
 #include <DxLib.h>
@@ -8,6 +10,8 @@
 
 using DxSound   = Sound::DxLibSoundFresh<int, int>;
 using DxGraph   = Graphic::DxLibGraphicFresh<int, int>;
+using DxKey     = Key::DxLibKeyFresh;
+using DxMouse   = Mouse::DxLibMouseFresh;
 using CSVReader = CSV::CSVReader<int,int>;
 using CSVWriter = CSV::CSVWriter;
 
@@ -60,8 +64,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     CSVReader::GetInstance()->Add(0,0, "rrr", 1);
     CSVReader::GetInstance()->Add(1,0, "SaveData", 1);
     CSVReader::GetInstance()->SceneInput(0);
-    printfDx("rrr = %s\n", CSVReader::GetInstance()->StringData<std::string>(0, 0, 0).c_str());
-    printfDx("SaveData = %s\n", CSVReader::GetInstance()->StringData<std::string>(1, 0, 0).c_str());
+//    printfDx("rrr = %s\n", CSVReader::GetInstance()->StringData<std::string>(0, 0, 0).c_str());
+//    printfDx("SaveData = %s\n", CSVReader::GetInstance()->StringData<std::string>(1, 0, 0).c_str());
 
     // CSV‘‚«‚İ //
     std::vector<std::vector<std::string>> data =
@@ -71,19 +75,40 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     };
     CSVWriter::GetInstance()->CSVFolderPath("Data/CSV/");
     CSVWriter::GetInstance()->Write("SaveData", data);
-
+    
+    bool isButton = false;
     while (ProcessMessage() == 0)
     {
         LONGLONG  time = GetNowHiPerformanceCount();
 
-#if false
+#if true    
         // ‰æ–Ê‚ÌƒNƒŠƒA
 
         ClearDrawScreen();
 
 
+        DxKey::GetInstance()->Update();
+        DxMouse::GetInstance()->Update();
 
+        if (DxKey::GetInstance()->IsTrigger(KEY_INPUT_Z))
+        {
+            isButton = !isButton;
+        }
+        if (DxMouse::GetInstance()->IsTrigger(MOUSE_INPUT_1))
+        {
+            isButton = !isButton;
+        }
 
+        DxSound::GetInstance()->SceneInput(isButton);
+        DxGraph::GetInstance()->SceneInput(isButton);        
+        CSVReader::GetInstance()->SceneInput(isButton);
+
+        DrawGraph(0, 0, DxGraph::GetInstance()->GetHandle(0), true);
+
+        DrawFormatString(0, 0, 0xffffff, "rrr = %s\n", CSVReader::GetInstance()->StringData<std::string>(0, 0, 0).c_str());
+        DrawFormatString(0,16, 0xffffff, "SaveData = %s\n", CSVReader::GetInstance()->StringData<std::string>(1, 0, 0).c_str());     
+
+        DrawFormatString(0, 32, 0xffffff, "Mouse|| X : %f , Y : %f", DxMouse::GetInstance()->GetPos<float>().x, DxMouse::GetInstance()->GetPos<float>().y);
 
         // — ‰æ–Ê‚ğ•\‰æ–Ê‚ğ“ü‚ê‘Ö‚¦‚é
         ScreenFlip();
