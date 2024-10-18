@@ -55,7 +55,7 @@ namespace Sound
         /// <param name="grahicFolderPath"></param>
         void SoundFolderPath(const char* grahicFolderPath)
         {
-            m_filePath = grahicFolderPath;
+            m_folderPath = grahicFolderPath;
         }
         
         /// <summary>
@@ -78,7 +78,7 @@ namespace Sound
             data.scene = scene;
             
             // 読み込み用ファイルパスを作成
-            data.filePath = m_filePath + soundName + extension;
+            data.filePath = m_folderPath + soundName + extension;
 
             // 初期ボリューム
             data.volume = volume;
@@ -90,7 +90,7 @@ namespace Sound
             if (isNoEnd)
             {
                 // サウンドの読み込み
-                data.handle = LoadSoundMem(m_filePath.c_str());
+                data.handle = LoadSoundMem(m_folderPath.c_str());
             }
             else
             {
@@ -195,7 +195,7 @@ namespace Sound
         // サウンドデータを管理する
         std::vector<SoundData> m_soundType;
 
-        // ファイルパス記録
-        std::string m_filePath;
+        // フォルダパス記録
+        std::string m_folderPath;
     };
 }

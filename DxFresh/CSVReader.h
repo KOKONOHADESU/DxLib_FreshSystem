@@ -50,7 +50,7 @@ namespace CSV
 		/// <param name="grahicFolderPath"></param>
 		void CSVFolderPath(const char* grahicFolderPath)
 		{
-			m_filePath = grahicFolderPath;
+			m_folderPath = grahicFolderPath;
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace CSV
 			data.scene = scene;
 
 			// ファイルパス
-			data.filePath = m_filePath + fileName + kExtension;
+			data.filePath = m_folderPath + fileName + kExtension;
 
 			// すべてのシーンで使用するかどうか
 			if (isNoEnd)
@@ -237,8 +237,8 @@ namespace CSV
 		}
 
 	private:
-		// ファイルパス
-		std::string m_filePath;
+		// フォルダパス記録
+		std::string m_folderPath;
 
 		// 読み込んだデータ
 		std::vector<readerData> m_readData;

@@ -35,7 +35,7 @@ namespace CSV
 		/// <param name="writerFolderPath">書き込み用フォルダのパス指定</param>
 		void CSVFolderPath(const char* writerFolderPath)
 		{
-			m_filePath = writerFolderPath;
+			m_folderPath = writerFolderPath;
 		}
 
 		/// <summary>
@@ -45,7 +45,7 @@ namespace CSV
 		/// <param name="wirteData">書き込む内容          </param>
 		void Write(const std::string& fileName, const std::vector<std::vector<std::string>>& wirteData)
 		{
-			std::ofstream ofs(m_filePath + fileName + kExtension);
+			std::ofstream ofs(m_folderPath + fileName + kExtension);
 
 			// ファイルが正しく開かれたか確認
 			if (!ofs.is_open())
@@ -77,8 +77,8 @@ namespace CSV
 
 	private:
 
-		// ファイルパス記録
-		std::string m_filePath;
+		// フォルダパス記録
+		std::string m_folderPath;
 	};
 }
 

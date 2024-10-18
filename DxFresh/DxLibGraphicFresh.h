@@ -59,7 +59,7 @@ namespace Graphic
 		/// <param name="grahicFolderPath"></param>
 		void GraphicFolderPath(const char* grahicFolderPath)
 		{
-			m_filePath = grahicFolderPath;
+			m_folderPath = grahicFolderPath;
 		}
 
 		/// <summary>
@@ -80,7 +80,7 @@ namespace Graphic
 			data.id = id;
 
 			// 画像パスの記録
-			data.graphPath = m_filePath + filePath + extension;
+			data.graphPath = m_folderPath + filePath + extension;
 
 			// 複数のシーンで画像を使用する場合
 			if (isNoEnd)
@@ -201,8 +201,8 @@ namespace Graphic
 		// 画像データ				
 		std::vector<GrahicData>m_graphData;
 
-		// ファイルパス記録
-		std::string m_filePath;
+		// フォルダパス記録
+		std::string m_folderPath;
 	};
 }
 
