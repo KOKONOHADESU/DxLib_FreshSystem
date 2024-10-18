@@ -1,9 +1,10 @@
-#include "DxFresh/DxLibSoundFresh.h"
-#include "DxFresh/DxLibGraphicFresh.h"
-#include "DxFresh/DxLibKeyFresh.h"
-#include "DxFresh/DxLibMouseFresh.h"
-#include "DxFresh/CSVReader.h"
-#include "DxFresh/CSVWriter.h"
+#include "FreshLib/DxLibSoundFresh.h"
+#include "FreshLib/DxLibGraphicFresh.h"
+#include "FreshLib/DxLibKeyFresh.h"
+#include "FreshLib/DxLibMouseFresh.h"
+#include "FreshLib/CSVReader.h"
+#include "FreshLib/CSVWriter.h"
+#include "FreshLib/MTRandom.h"
 
 #include <DxLib.h>
 #include <crtdbg.h>
@@ -14,6 +15,7 @@ using DxKey     = Key::DxLibKeyFresh;
 using DxMouse   = Mouse::DxLibMouseFresh;
 using CSVReader = CSV::CSVReader<int,int>;
 using CSVWriter = CSV::CSVWriter;
+using MTRand    = Rand::MTRandom;
 
 // プログラムはWinMainから始まります
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
@@ -77,15 +79,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     CSVWriter::GetInstance()->Write("SaveData", data);
     
     bool isButton = false;
+    float rand = -1;
     while (ProcessMessage() == 0)
     {
         LONGLONG  time = GetNowHiPerformanceCount();
 
-#if true    
         // 画面のクリア
-
         ClearDrawScreen();
-
+#if true    
 
         DxKey::GetInstance()->Update();
         DxMouse::GetInstance()->Update();
@@ -93,10 +94,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         if (DxKey::GetInstance()->IsTrigger(KEY_INPUT_Z))
         {
             isButton = !isButton;
+            rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);
         }
         if (DxMouse::GetInstance()->IsTrigger(MOUSE_INPUT_1))
         {
             isButton = !isButton;
+            rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);
         }
 
         DxSound::GetInstance()->SceneInput(isButton);
@@ -105,14 +108,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
         DrawGraph(0, 0, DxGraph::GetInstance()->GetHandle(0), true);
 
-        DrawFormatString(0, 0, 0xffffff, "rrr = %s\n", CSVReader::GetInstance()->StringData<std::string>(0, 0, 0).c_str());
-        DrawFormatString(0,16, 0xffffff, "SaveData = %s\n", CSVReader::GetInstance()->StringData<std::string>(1, 0, 0).c_str());     
+        DrawFormatString(0, 0, 0xffffff, "rrr = %s", CSVReader::GetInstance()->StringData<std::string>(0, 0, 0).c_str());
+        DrawFormatString(0,16, 0xffffff, "SaveData = %s", CSVReader::GetInstance()->StringData<std::string>(1, 0, 0).c_str());     
+        DrawFormatString(0, 32, 0xffffff, "Mouse || X : %f , Y : %f", DxMouse::GetInstance()->GetPos<float>().x, DxMouse::GetInstance()->GetPos<float>().y);
+        DrawFormatString(0, 48, 0xffffff, "MTRand = %f", rand);
 
-        DrawFormatString(0, 32, 0xffffff, "Mouse|| X : %f , Y : %f", DxMouse::GetInstance()->GetPos<float>().x, DxMouse::GetInstance()->GetPos<float>().y);
-
+#endif
         // 裏画面を表画面を入れ替える
         ScreenFlip();
-#endif
 
         // escキーを押したら終了する
         if (CheckHitKey(KEY_INPUT_ESCAPE))

@@ -20,31 +20,34 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DxFresh\CSVCommon.h">
+    <ClInclude Include="FreshLib\CSVCommon.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DxFresh\CSVReader.h">
+    <ClInclude Include="FreshLib\CSVReader.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DxFresh\CSVWriter.h">
+    <ClInclude Include="FreshLib\CSVWriter.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DxFresh\DxLibGraphicFresh.h">
+    <ClInclude Include="FreshLib\DxLibGraphicFresh.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DxFresh\DxLibSoundFresh.h">
+    <ClInclude Include="FreshLib\DxLibSoundFresh.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DxFresh\SingletonBase.h">
+    <ClInclude Include="FreshLib\SingletonBase.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DxFresh\Vec2.h">
+    <ClInclude Include="FreshLib\Vec2.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DxFresh\DxLibKeyFresh.h">
+    <ClInclude Include="FreshLib\DxLibKeyFresh.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DxFresh\DxLibMouseFresh.h">
+    <ClInclude Include="FreshLib\DxLibMouseFresh.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="FreshLib\MTRandom.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
