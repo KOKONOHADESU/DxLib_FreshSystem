@@ -146,6 +146,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FreshLib\DxLibFontFresh.h" />
     <ClInclude Include="FreshLib\CSVCommon.h" />
     <ClInclude Include="FreshLib\CSVReader.h" />
     <ClInclude Include="FreshLib\CSVWriter.h" />

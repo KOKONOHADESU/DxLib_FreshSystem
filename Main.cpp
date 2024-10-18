@@ -23,7 +23,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
 #if _DEBUG
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-#endif
+#endif   
 
     // windowモード設定
     ChangeWindowMode(true);
@@ -77,6 +77,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     };
     CSVWriter::GetInstance()->CSVFolderPath("Data/CSV/");
     CSVWriter::GetInstance()->Write("SaveData", data);
+
+    // フォントデータの読み込み
+ //   AddFontResourceEx("Data/Font/NikkyouSans-mLKax.ttf", FR_PRIVATE, NULL);
+    int FontHandle = CreateFontToHandle("Nikkyou Sans", 40, 3, DX_FONTTYPE_NORMAL, DX_CHARSET_DEFAULT);
     
     bool isButton = false;
     float rand = -1;
@@ -112,6 +116,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         DrawFormatString(0,16, 0xffffff, "SaveData = %s", CSVReader::GetInstance()->StringData<std::string>(1, 0, 0).c_str());     
         DrawFormatString(0, 32, 0xffffff, "Mouse || X : %f , Y : %f", DxMouse::GetInstance()->GetPos<float>().x, DxMouse::GetInstance()->GetPos<float>().y);
         DrawFormatString(0, 48, 0xffffff, "MTRand = %f", rand);
+
+        DrawString(0, 64, "123456789011", GetColor(255, 0, 0));
+        DrawStringToHandle(0, 80, "123456789011", GetColor(255, 255, 0), FontHandle);
 
 #endif
         // 裏画面を表画面を入れ替える
