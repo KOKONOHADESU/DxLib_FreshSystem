@@ -120,6 +120,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         DxGraph::GetInstance()->SceneInput(isButton);        
         CSVReader::GetInstance()->SceneInput(isButton);
         DxSound::GetInstance()->SceneInput(isButton);
+        DxFont::GetInstance()->SceneInput(isButton);
 
         DrawGraph(0, 0, DxGraph::GetInstance()->GetHandle(0), true);
 
@@ -128,8 +129,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         DrawFormatString(0, 32, 0xffffff, "Mouse || X : %f , Y : %f", DxMouse::GetInstance()->GetPos<float>().x, DxMouse::GetInstance()->GetPos<float>().y);
         DrawFormatString(0, 48, 0xffffff, "MTRand = %f", rand);
 
-        DrawString(0, 64, "123456789011", GetColor(255, 0, 0));
-        DrawStringToHandle(0, 80, "123456789011", GetColor(255, 255, 0), DxFont::GetInstance()->GetHandle(0));
+        DrawFormatString(0, 64, 0xffff00, "%d", DxFont::GetInstance()->GetHandle(0));
+        DrawFormatStringToHandle(0, 80, GetColor(255, 255, 0), DxFont::GetInstance()->GetHandle(0), "%d", DxFont::GetInstance()->GetHandle(0));
 
 #endif
         // — ‰æ–Ê‚ð•\‰æ–Ê‚ð“ü‚ê‘Ö‚¦‚é
