@@ -1,2 +1,2 @@
-名前,最終地点,体力
-name,japan,32
+名前,最終地点,体力,敵1,敵2,敵3
+name,japan,32,dead,dead,alive

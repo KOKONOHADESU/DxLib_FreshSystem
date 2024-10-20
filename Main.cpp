@@ -74,8 +74,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     // CSV書き込み //
     std::vector<std::vector<std::string>> data =
     {
-        {"名前,最終地点,体力"},
-        {"name,japan,32"}
+        {"名前,最終地点,体力,敵1,敵2,敵3"},
+        {"name,japan,32,dead,dead,alive"}
     };
     CSVWriter::GetInstance()->CSVFolderPath("Data/CSV/");
     CSVWriter::GetInstance()->Write("SaveData", data);

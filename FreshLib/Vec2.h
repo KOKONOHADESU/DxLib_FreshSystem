@@ -4,7 +4,6 @@
 #include<cmath>
 
 //2ŽŸŒ³ƒxƒNƒgƒ‹
-
 template <class T>
 class Vec2
 {

@@ -127,7 +127,7 @@ namespace Graphic
 					m_graphData[i].handle = LoadGraph(m_graphData[i].graphPath.c_str());
 
 					// ì«Ç›çûÇ›é∏îsÇµÇΩÇÁ
-					if (m_graphData[i].handle == -1)return;	
+					if (m_graphData[i].handle == -1)continue;
 
 					continue;
 				}
