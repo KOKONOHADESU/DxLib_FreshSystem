@@ -95,9 +95,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
     SaveDat datDatas
     {
-        111,
-        222,
-        "aiueo",
+        100,
+        200,
+        "–¼‘O",
     };
 
     DATWriter::GetInstance()->DATFolderPath("Data/DAT/");
@@ -157,7 +157,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         DrawFormatString(0, 64, 0xffff00, "%d", DxFont::GetInstance()->GetHandle(0));
         DrawFormatStringToHandle(0, 80, GetColor(255, 255, 0), DxFont::GetInstance()->GetHandle(0), "%d", DxFont::GetInstance()->GetHandle(0));
 
- //       DrawFormatString(0, 96, 0xffffff, "%d : %d : %s", DATReader::GetInstance()->GetData(0).a, DATReader::GetInstance()->GetData(0).b, DATReader::GetInstance()->GetData(0).stringngngn.c_str());
+        DrawFormatString(0, 96, 0xffffff, "%d : %d : %s", DATReader::GetInstance()->GetData(0).a, DATReader::GetInstance()->GetData(0).b, DATReader::GetInstance()->GetData(0).name);
 
         
 
