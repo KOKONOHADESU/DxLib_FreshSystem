@@ -6,7 +6,6 @@
 #include <string>
 #include <map>
 
-
 /// <summary>
 /// .datファイル関連
 /// </summary>
