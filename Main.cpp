@@ -6,9 +6,8 @@
 #include "FreshLib/CSVReader.h"
 #include "FreshLib/CSVWriter.h"
 #include "FreshLib/MTRandom.h"
-
-#include "DATWriter.h"
-#include "DATReader.h"
+#include "FreshLib/DATWriter.h"
+#include "FreshLib/DATReader.h"
 
 #include <DxLib.h>
 #include <crtdbg.h>
@@ -95,12 +94,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
     saveDat datDatas{ 111,222 ,"daadadadadada" };
 
-    Dat::DATWriter<int, saveDat>* dat = new Dat::DATWriter<int, saveDat>();
+    Dat::DATWriter<saveDat>* dat = new Dat::DATWriter<saveDat>();
     dat->CSVFolderPath("");
-    dat->Write("save.dat", 0, datDatas);
+    dat->Write("save", datDatas);
 
-    Dat::DATReader<int, saveDat>* dat2 = new Dat::DATReader<int, saveDat>();
-    saveDat datData1 = dat2->Reader("save.dat", 0);
+    Dat::DATReader<int,int, saveDat>* dat2 = new Dat::DATReader<int, int, saveDat>();
+    dat2->Add(0, 0, "save");
+
 
     bool isButton = false;
     float rand = -1;
@@ -139,6 +139,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         CSVReader::GetInstance()->SceneInput(isButton);
         DxSound::GetInstance()->SceneInput(isButton);
         DxFont::GetInstance()->SceneInput(isButton);
+        dat2->SceneInput(isButton);
 
         DrawGraph(0, 0, DxGraph::GetInstance()->GetHandle(0), true);
 
@@ -150,7 +151,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         DrawFormatString(0, 64, 0xffff00, "%d", DxFont::GetInstance()->GetHandle(0));
         DrawFormatStringToHandle(0, 80, GetColor(255, 255, 0), DxFont::GetInstance()->GetHandle(0), "%d", DxFont::GetInstance()->GetHandle(0));
 
-        DrawFormatStringToHandle(0, 96, 0xffffff, DxFont::GetInstance()->GetHandle(0), "%d : %d : %s", datData1.a, datData1.b, datData1.stringngngn.c_str());
+//        DrawFormatStringToHandle(0, 96, 0xffffff, DxFont::GetInstance()->GetHandle(0), "%d : %d : %s", dat2->GetData(0).a, dat2->GetData(0).b, dat2->GetData(0).stringngngn.c_str());
+        DrawFormatString(0, 96, 0xffffff, "%d : %d : %s", dat2->GetData(0).a, dat2->GetData(0).b, dat2->GetData(0).stringngngn.c_str());
 
         
 

@@ -163,24 +163,14 @@ namespace Font
 		/// <returns        >ハンドルデータ</returns>
 		int GetHandle(const U& id)
 		{
-			int handle = -1;
+			// マップからIDに対応するフォントデータを検索
+			auto it = m_font.find(id);
 
-			// すべてを確認
-			for (auto& fontData : m_font)
+			// IDが見つかったらハンドルを返す、見つからなかったら -1 を返す
+			if (it != m_font.end())
 			{
-				// マップからIDに対応するフォントデータを検索
-				auto it = m_font.find(id);
-
-				// IDが見つかったらハンドルを返す、見つからなかったら -1 を返す
-				if (it != m_font.end())
-				{
-					return it->second.handle;
-				}
-
-				return -1;
-			}			
-
-			return handle;
+				return it->second.handle;
+			}
 		}
 
 	private:

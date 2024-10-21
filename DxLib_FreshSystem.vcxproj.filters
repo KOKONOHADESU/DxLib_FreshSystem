@@ -53,10 +53,13 @@
     <ClInclude Include="FreshLib\DxLibFontFresh.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DATWriter.h">
+    <ClInclude Include="FreshLib\DATWriter.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="DATReader.h">
+    <ClInclude Include="FreshLib\DATReader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="FreshLib\DATCommon.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -45,7 +45,7 @@ namespace CSV
 		/// <param name="wirteData">書き込む内容          </param>
 		void Write(const std::string& fileName, const std::vector<std::vector<std::string>>& wirteData)
 		{
-			std::ofstream ofs(m_folderPath + fileName + kExtension);
+			std::ofstream ofs(m_folderPath + fileName + CSV::kExtension);
 
 			// ファイルが正しく開かれたか確認
 			if (!ofs.is_open())

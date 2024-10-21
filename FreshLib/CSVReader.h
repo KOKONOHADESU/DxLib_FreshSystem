@@ -72,7 +72,7 @@ namespace CSV
 			data.scene = scene;
 
 			// ファイルパス
-			data.filePath = m_folderPath + fileName + kExtension;
+			data.filePath = m_folderPath + fileName + CSV::kExtension;
 
 			// すべてのシーンで使用するかどうか
 			if (isNoEnd)
