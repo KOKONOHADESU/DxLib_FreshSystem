@@ -101,7 +101,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     Dat::DATReader<int,int, saveDat>* dat2 = new Dat::DATReader<int, int, saveDat>();
     dat2->Add(0, 0, "save");
 
-
     bool isButton = false;
     float rand = -1;
 

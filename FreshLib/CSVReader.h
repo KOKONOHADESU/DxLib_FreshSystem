@@ -27,12 +27,12 @@ namespace CSV
 		/// </summary>
 		struct readerData
 		{
-			T id;                                             // ID
-			U scene;                                          // シーン	
+			T id{};                                           // ID
+			U scene{};                                        // シーン	
 			std::string filePath;                             // パス
 			std::vector<std::vector<std::string>> stringData; // CSVから読み込んだ文字
-			int ignoreCellNum;                                // 無視するセル
-			bool isNoEnd;                                     // どのシーンでも使用する場合
+			int ignoreCellNum = 0;                            // 無視するセル
+			bool isNoEnd = false;                             // どのシーンでも使用する場合
 		};
 	public:
 		// SingletonBaseクラスのアクセスを許可する

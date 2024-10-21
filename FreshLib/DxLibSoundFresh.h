@@ -24,12 +24,12 @@ namespace Sound
         // サウンド再生に必要なデータ
         struct SoundData
         {
-            T id;                  // ID
-            U scene;               // 使用するシーン
-            int handle;            // ハンドル
+            T id{};                // ID
+            U scene{};             // 使用するシーン
+            int handle = -1;       // ハンドル
             std::string filePath;  // ファイルパス
-            int volume;            // 音量
-            bool isNoEnd;          // どのシーンでもメモリを解放しない場合
+            int volume = 0;        // 音量
+            bool isNoEnd = false;  // どのシーンでもメモリを解放しない場合
         };
 
     public:

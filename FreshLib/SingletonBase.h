@@ -12,7 +12,7 @@ public:
 	/// インスタンスの初期化とポインターの取得
 	/// </summary>
 	/// <returns>ポインターと渡す</returns>
-	static  T* GetInstance()
+	static T* GetInstance()
 	{
 		if (!m_pInstance)
 		{

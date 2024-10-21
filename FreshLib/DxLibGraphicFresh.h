@@ -26,12 +26,12 @@ namespace Graphic
 		// 画像データ
 		struct GrahicData
 		{
-			U id;                  // ID
+			U id{};                // ID
 			std::string graphPath; // 画像パス
-			int handle;            // 画像データ
+			int handle = -1;       // 画像データ
 			Vec2<float> size;      // 画像サイズ
-			T scene;               // 使用するシーン
-			bool isNoEnd;          // どのシーンでもメモリを解放しない場合
+			T scene{};             // 使用するシーン
+			bool isNoEnd = false;  // どのシーンでもメモリを解放しない場合
 		};
 
 	public:

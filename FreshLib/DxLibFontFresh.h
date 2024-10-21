@@ -22,13 +22,13 @@ namespace Font
 		// フォントデータ
 		struct FontData
 		{
-			U scene{};              // 使用シーン
-			int handle;           // ハンドルデータ
+			U scene{};            // 使用シーン
+			int handle = -1;      // ハンドルデータ
 			std::string filePath; // ファイルパス
 			std::string fontName; // フォントの名前
-			int size;             // サイズ
-			int thick;            // 厚さ
-			bool isNoEnd;         // すべてのシーンで使用するかどうか
+			int size = -1;        // サイズ
+			int thick = -1;       // 厚さ
+			bool isNoEnd = false; // すべてのシーンで使用するかどうか
 		};
 
 	public:

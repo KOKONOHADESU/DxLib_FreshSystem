@@ -25,10 +25,10 @@ namespace Dat
 		/// </summary>
 		struct ReaderData
 		{
-			U scene;              // シーン	
+			U scene{};            // シーン	
 			std::string filePath; // パス			
-			V data;               // .dataファイルデータ
-			bool isNoEnd;         // どのシーンでも使用する場合
+			V data{};             // .dataファイルデータ
+			bool isNoEnd = false; // どのシーンでも使用する場合
 		};
 	public:
 		DATReader() {};
