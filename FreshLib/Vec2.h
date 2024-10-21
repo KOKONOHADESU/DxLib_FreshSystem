@@ -13,8 +13,8 @@ public:
 
 public:
 	Vec2():
-		x(0.0f),
-		y(0.0f)
+		x(static_cast<T>(0)),
+		y(static_cast<T>(0))
 	{
 
 	}
