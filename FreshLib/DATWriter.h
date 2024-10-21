@@ -1,31 +1,36 @@
 #pragma once
 
+#include "SingletonBase.h"
+#include "DATCommon.h"
+
 #include <string>
 #include <map>
-
-#include "DATCommon.h"
 
 /// <summary>
 /// .datファイル関連
 /// </summary>
-namespace Dat
+namespace DAT
 {	
 	/// <summary>
 	/// .datファイルを作成,上書き保存
 	/// </summary	
 	/// <typeparam name="T">データの型</typeparam>
 	template<typename T>
-	class DATWriter
+	class DATWriter : public SingletonBase<DATWriter<T>>
 	{
 	public:
+		// SingletonBaseクラスのアクセスを許可する
+		friend class SingletonBase<DATWriter<T>>;
+	private:
 		DATWriter() {};
+	public:
 		~DATWriter() {};
 
 		/// <summary>
 		/// .datファイルがある階層のフォルダーを指定
 		/// </summary>
 		/// <param name="writerFolderPath">書き込み用フォルダのパス指定</param>
-		void CSVFolderPath(const char* writerFolderPath)
+		void DATFolderPath(const char* writerFolderPath)
 		{
 			m_folderPath = writerFolderPath;
 		}

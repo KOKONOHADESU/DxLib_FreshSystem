@@ -12,15 +12,6 @@
 #include <DxLib.h>
 #include <crtdbg.h>
 
-using DxSound   = Sound::DxLibSoundFresh<int, int>;
-using DxGraph   = Graphic::DxLibGraphicFresh<int, int>;
-using DxKey     = Key::DxLibKeyFresh;
-using DxMouse   = Mouse::DxLibMouseFresh;
-using CSVReader = CSV::CSVReader<int,int>;
-using CSVWriter = CSV::CSVWriter;
-using MTRand    = Rand::MTRandom;
-using DxFont    = Font::DxLibFontFresh<int, int>;
-
 // プログラムはWinMainから始まります
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
@@ -33,7 +24,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     ChangeWindowMode(true);
 
     // ウインドウ名設定
-    SetMainWindowText("DxLib_FreshSystem");
+    SetMainWindowText("FreshSystem");
 
     // 画面サイズの設定
     SetGraphMode(1280, 720, 32);
@@ -50,6 +41,23 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         // エラーが起きたら直ちに終了
         return -1;
     }
+
+    struct SaveDat
+    {
+        int a;
+        int b;
+        std::string stringngngn;
+    };
+    using DxSound = Sound::DxLibSoundFresh<int, int>;
+    using DxGraph = Graphic::DxLibGraphicFresh<int, int>;
+    using DxKey = Key::DxLibKeyFresh;
+    using DxMouse = Mouse::DxLibMouseFresh;
+    using CSVReader = CSV::CSVReader<int, int>;
+    using CSVWriter = CSV::CSVWriter;
+    using DATReader = DAT::DATReader<int, int, SaveDat>;
+    using DATWriter = DAT::DATWriter<SaveDat>;
+    using MTRand = Rand::MTRandom;
+    using DxFont = Font::DxLibFontFresh<int, int>;
 
     // サウンド管理 //
     DxSound::GetInstance()->SoundFolderPath("Data/Sound/");
@@ -84,22 +92,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     DxFont::GetInstance()->Add(0, 0, "NikkyouSans-mLKax", ".ttf", "Nikkyou Sans");
     DxFont::GetInstance()->SceneInput(0);
 
+    SaveDat datDatas{ 111,222 ,"daadadadadada" };
 
-    struct saveDat
-    {
-        int a;
-        int b;
-        std::string stringngngn;
-    };
+    DATWriter::GetInstance()->DATFolderPath("Data/DAT/");
+    DATWriter::GetInstance()->Write("SaveData", datDatas);
 
-    saveDat datDatas{ 111,222 ,"daadadadadada" };
-
-    Dat::DATWriter<saveDat>* dat = new Dat::DATWriter<saveDat>();
-    dat->CSVFolderPath("");
-    dat->Write("save", datDatas);
-
-    Dat::DATReader<int,int, saveDat>* dat2 = new Dat::DATReader<int, int, saveDat>();
-    dat2->Add(0, 0, "save");
+    DATReader::GetInstance()->DATFolderPath("Data/DAT/");
+    DATReader::GetInstance()->Add(0, 0, "SaveData");
 
     bool isButton = false;
     float rand = -1;
@@ -120,11 +119,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         {
             isButton = !isButton;
             rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);            
+            count = 60;
         }
         if (DxMouse::GetInstance()->IsTrigger(MOUSE_INPUT_1))
         {
             isButton = !isButton;
             rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);
+            count = 60;
         }
 
         if (count++ > 60 * 1)
@@ -138,7 +139,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         CSVReader::GetInstance()->SceneInput(isButton);
         DxSound::GetInstance()->SceneInput(isButton);
         DxFont::GetInstance()->SceneInput(isButton);
-        dat2->SceneInput(isButton);
+        DATReader::GetInstance()->SceneInput(isButton);
 
         DrawGraph(0, 0, DxGraph::GetInstance()->GetHandle(0), true);
 
@@ -150,8 +151,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         DrawFormatString(0, 64, 0xffff00, "%d", DxFont::GetInstance()->GetHandle(0));
         DrawFormatStringToHandle(0, 80, GetColor(255, 255, 0), DxFont::GetInstance()->GetHandle(0), "%d", DxFont::GetInstance()->GetHandle(0));
 
-//        DrawFormatStringToHandle(0, 96, 0xffffff, DxFont::GetInstance()->GetHandle(0), "%d : %d : %s", dat2->GetData(0).a, dat2->GetData(0).b, dat2->GetData(0).stringngngn.c_str());
-        DrawFormatString(0, 96, 0xffffff, "%d : %d : %s", dat2->GetData(0).a, dat2->GetData(0).b, dat2->GetData(0).stringngngn.c_str());
+ //       DrawFormatString(0, 96, 0xffffff, "%d : %d : %s", DATReader::GetInstance()->GetData(0).a, DATReader::GetInstance()->GetData(0).b, DATReader::GetInstance()->GetData(0).stringngngn.c_str());
 
         
 
@@ -179,7 +179,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     CSVReader::GetInstance()->Destroy();
     CSVWriter::GetInstance()->Destroy();
     MTRand   ::GetInstance()->Destroy();
-    DxFont   ::GetInstance()->Destroy();    
+    DxFont   ::GetInstance()->Destroy();
+    DATWriter::GetInstance()->Destroy();
+    DATReader::GetInstance()->Destroy();
 
     // ＤＸライブラリ使用の終了処理
     DxLib_End();

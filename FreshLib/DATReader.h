@@ -1,14 +1,16 @@
 #pragma once
 
+#include "SingletonBase.h"
+#include "DATCommon.h"
+
 #include <string>
 #include <map>
 
-#include "DATCommon.h"
 
 /// <summary>
 /// .datファイル関連
 /// </summary>
-namespace Dat
+namespace DAT
 {	
 	/// <summary>
 	/// .datファイルを作成,上書き保存
@@ -17,7 +19,7 @@ namespace Dat
 	/// <typeparam name="U">使用するシーン</typeparam>
 	/// <typeparam name="V">データの型    </typeparam>
 	template<typename T, typename U , typename V>
-	class DATReader
+	class DATReader : public SingletonBase<DATReader<T, U, V>>
 	{
 	private:
 		/// <summary>
@@ -31,14 +33,18 @@ namespace Dat
 			bool isNoEnd = false; // どのシーンでも使用する場合
 		};
 	public:
+		// SingletonBaseクラスのアクセスを許可する
+		friend class SingletonBase<DATReader<T, U, V>>;
+	private:
 		DATReader() {};
+	public:
 		~DATReader() {};
 
 		/// <summary>
 		/// .datファイルがある階層のフォルダーを指定
 		/// </summary>
 		/// <param name="writerFolderPath">書き込み用フォルダのパス指定</param>
-		void CSVFolderPath(const char* writerFolderPath)
+		void DATFolderPath(const char* writerFolderPath)
 		{
 			m_folderPath = writerFolderPath;
 		}
@@ -66,9 +72,14 @@ namespace Dat
 			{				
 				// データをファイルに書き込む
 				std::ifstream ifs;
-				ifs.open(m_folderPath + fileName + DAT::kExtension, std::ios_base::binary);
+				ifs.open(data.filePath, std::ios_base::binary);
 				ifs.read((char*)&data.data, sizeof(V));
 				ifs.close();
+			}
+			else
+			{
+				// 初期化
+				data.data = V();
 			}
 
 			// 他のシーンでも使用するかどうか
@@ -106,6 +117,8 @@ namespace Dat
 				{
 					// 初期化
 					datData.data = V();
+
+					continue;
 				}
 			}
 		}
@@ -113,14 +126,14 @@ namespace Dat
 		/// <summary>
 		/// データを渡す
 		/// </summary>
-		/// <param name="id">ID    </param>
-		/// <returns        >データ</returns>
+		/// <param name="U">ID    </param>
+		/// <returns       >データ</returns>
 		V GetData(const U& id)
 		{
-			// マップからIDに対応するフォントデータを検索
+			// マップからIDに対応するデータを検索
 			auto it = m_datData.find(id);
 
-			// IDが見つかったらハンドルを返す、見つからなかったら -1 を返す
+			// IDが見つかったらハンドルを返す
 			if (it != m_datData.end())
 			{
 				return it->second.data;
