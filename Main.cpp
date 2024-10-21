@@ -49,16 +49,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         int b;
         const char* name;
     };
-    using DxSound = Sound::DxLibSoundFresh<int, int>;
-    using DxGraph = Graphic::DxLibGraphicFresh<int, int>;
-    using DxKey = Key::DxLibKeyFresh;
-    using DxMouse = Mouse::DxLibMouseFresh;
-    using CSVReader = CSV::CSVReader<int, int>;
-    using CSVWriter = CSV::CSVWriter;
-    using DATReader = DAT::DATReader<int, int, SaveDat>;
-    using DATWriter = DAT::DATWriter<SaveDat>;
-    using MTRand = Rand::MTRandom;
-    using DxFont = Font::DxLibFontFresh<int, int>;
+    using DxSound   = Sound  ::DxLibSoundFresh<int, int>;
+    using DxGraph   = Graphic::DxLibGraphicFresh<int, int>;
+    using DxKey     = Key    ::DxLibKeyFresh;
+    using DxMouse   = Mouse  ::DxLibMouseFresh;
+    using CSVReader = CSV    ::CSVReader<int, int>;
+    using CSVWriter = CSV    ::CSVWriter;
+    using DATReader = DAT    ::DATReader<int, int, SaveDat>;
+    using DATWriter = DAT    ::DATWriter<SaveDat>;
+    using MTRand    = Rand   ::MTRandom;
+    using DxFont    = Font   ::DxLibFontFresh<int, int>;
 
     // ƒTƒEƒ“ƒhŠÇ— //
     DxSound::GetInstance()->SoundFolderPath("Data/Sound/");
