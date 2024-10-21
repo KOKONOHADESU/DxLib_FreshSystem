@@ -22,10 +22,12 @@ namespace Font
 		// フォントデータ
 		struct FontData
 		{
-			U scene;              // 使用シーン
+			U scene{};              // 使用シーン
 			int handle;           // ハンドルデータ
 			std::string filePath; // ファイルパス
 			std::string fontName; // フォントの名前
+			int size;             // サイズ
+			int thick;            // 厚さ
 			bool isNoEnd;         // すべてのシーンで使用するかどうか
 		};
 
@@ -55,29 +57,31 @@ namespace Font
 		/// <param name="fileName" >ファイルの名前                </param>
 		/// <param name="extension">拡張子                        </param>
 		/// <param name="fontName" >フォントの名前                </param>
+		/// <param name="size"     >フォントのサイズ              </param>
+		/// <param name="thick"    >フォントの厚さ                </param>
 		/// <param name="isNoEnd"  >他のシーンでも使用するかどうか</param>
 		/// <returns               >true : 成功 , false : 失敗    </returns>
-		bool Add(const T& id, const U& scene, const std::string& fileName, const std::string& extension, const std::string& fontName, bool isNoEnd = false)
+		bool Add(const T& id, const U& scene, const std::string& fileName, const std::string& extension, const std::string& fontName, int size = -1, int thick = -1, bool isNoEnd = false)
 		{
 			FontData data{};
 
 			// 使用するシーン
 			data.scene = scene;
 
+			// シーンに左右されないデータを作成する場合
 			if (isNoEnd)
 			{
 				// ファイルパスを作成
-				std::string filePath = m_folderPath + fileName + extension;
+				const std::string filePath = m_folderPath + fileName + extension;
 
-				// フォントの読み込み
-				int result = AddFontResourceEx(filePath.c_str(), FR_PRIVATE, NULL);
-				if (result == 0)
+				// フォントの読み込み				
+				if (AddFontResourceEx(filePath.c_str(), FR_PRIVATE, NULL) == 0)
 				{
 					return false;
 				}
 
 				// フォントハンドルを作成
-				data.handle = CreateFontToHandle(fontName.c_str(), 40, 3, DX_FONTTYPE_NORMAL, DX_CHARSET_DEFAULT);
+				data.handle = CreateFontToHandle(fontName.c_str(), size, thick, DX_FONTTYPE_NORMAL, DX_CHARSET_DEFAULT);
 				if (data.handle == -1)
 				{
 					return false;
@@ -95,6 +99,12 @@ namespace Font
 			// フォントの名前
 			data.fontName = fontName;
 
+			// サイズ
+			data.size = size;
+
+			// 厚さ
+			data.thick = thick;
+
 			// 他のシーンでも使用するかどうか
 			data.isNoEnd = isNoEnd;
 
@@ -111,25 +121,32 @@ namespace Font
 		/// <param name="scene">現在のシーン</param>
 		void SceneInput(const T& scene)
 		{
+			// すべてのデータを確認
 			for (auto& fontPair : m_font)
 			{
 				// secondでFontDataにアクセス
 				FontData& fontData = fontPair.second;  
 
+				// 特定のデータを確認
+				// ロードしていないデータを確認
 				if (fontData.scene == scene && fontData.handle == -1)
 				{
 					// フォントの読み込み
 					AddFontResourceEx(fontData.filePath.c_str(), FR_PRIVATE, NULL);
-					fontData.handle = CreateFontToHandle(fontData.fontName.c_str(), 40, 3, DX_FONTTYPE_NORMAL, DX_CHARSET_DEFAULT);
+					fontData.handle = CreateFontToHandle(fontData.fontName.c_str(), fontData.size, fontData.thick, DX_FONTTYPE_NORMAL, DX_CHARSET_DEFAULT);
 
+					// 読み込み失敗したら
 					if (fontData.handle == -1) return;
 
 					continue;
 				}
+				// 他シーンで使用する場合
 				else if (fontData.scene != scene && !fontData.isNoEnd)
 				{
+					// データが入っていた場合
 					if (fontData.handle != -1)
 					{
+						// 解放処理
 						DeleteFontToHandle(fontData.handle);
 						fontData.handle = -1;
 
@@ -167,7 +184,6 @@ namespace Font
 		}
 
 	private:
-
 		// フォント管理データ
 		std::map<T, FontData> m_font;
 

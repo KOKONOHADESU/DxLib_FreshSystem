@@ -7,6 +7,9 @@
 #include "FreshLib/CSVWriter.h"
 #include "FreshLib/MTRandom.h"
 
+#include "DATWriter.h"
+#include "DATReader.h"
+
 #include <DxLib.h>
 #include <crtdbg.h>
 
@@ -68,8 +71,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     CSVReader::GetInstance()->Add(0,0, "rrr", 1);
     CSVReader::GetInstance()->Add(1,0, "SaveData", 1);
     CSVReader::GetInstance()->SceneInput(0);
-//    printfDx("rrr = %s\n", CSVReader::GetInstance()->StringData<std::string>(0, 0, 0).c_str());
-//    printfDx("SaveData = %s\n", CSVReader::GetInstance()->StringData<std::string>(1, 0, 0).c_str());
 
     // CSV‘‚«‚İ //
     std::vector<std::vector<std::string>> data =
@@ -83,7 +84,24 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     DxFont::GetInstance()->FontFolderPath("Data/Font/");
     DxFont::GetInstance()->Add(0, 0, "NikkyouSans-mLKax", ".ttf", "Nikkyou Sans");
     DxFont::GetInstance()->SceneInput(0);
-    
+
+
+    struct saveDat
+    {
+        int a;
+        int b;
+        std::string stringngngn;
+    };
+
+    saveDat datDatas{ 111,222 ,"daadadadadada" };
+
+    Dat::DATWriter<int, saveDat>* dat = new Dat::DATWriter<int, saveDat>();
+    dat->CSVFolderPath("");
+    dat->Write("save.dat", 0, datDatas);
+
+    Dat::DATReader<int, saveDat>* dat2 = new Dat::DATReader<int, saveDat>();
+    saveDat datData1 = dat2->Reader("save.dat", 0);
+
     bool isButton = false;
     float rand = -1;
 
@@ -131,6 +149,10 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
         DrawFormatString(0, 64, 0xffff00, "%d", DxFont::GetInstance()->GetHandle(0));
         DrawFormatStringToHandle(0, 80, GetColor(255, 255, 0), DxFont::GetInstance()->GetHandle(0), "%d", DxFont::GetInstance()->GetHandle(0));
+
+        DrawFormatStringToHandle(0, 96, 0xffffff, DxFont::GetInstance()->GetHandle(0), "%d : %d : %s", datData1.a, datData1.b, datData1.stringngngn.c_str());
+
+        
 
 #endif
         // — ‰æ–Ê‚ğ•\‰æ–Ê‚ğ“ü‚ê‘Ö‚¦‚é

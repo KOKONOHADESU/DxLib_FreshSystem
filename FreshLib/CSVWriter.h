@@ -30,7 +30,7 @@ namespace CSV
 		~CSVWriter() {};		
 
 		/// <summary>
-		/// 画像がある階層のフォルダーを指定
+		/// CSVファイルがある階層のフォルダーを指定
 		/// </summary>
 		/// <param name="writerFolderPath">書き込み用フォルダのパス指定</param>
 		void CSVFolderPath(const char* writerFolderPath)

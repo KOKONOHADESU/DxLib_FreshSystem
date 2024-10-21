@@ -29,7 +29,7 @@ namespace Mouse
 
 	private:
 		DxLibMouseFresh() :
-			m_pos({ 0,0 }),
+			m_pos({ 0.0f,0.0f }),
 			m_isTrigger(false),
 			m_pressFrameCount(0)
 		{
@@ -48,8 +48,8 @@ namespace Mouse
 			GetMousePoint(&x, &y);
 
 			// 座標をコピー
-			m_pos.x = static_cast<int>(x);
-			m_pos.y = static_cast<int>(y);
+			m_pos.x = static_cast<float>(x);
+			m_pos.y = static_cast<float> (y);
 		}
 
 		/// <summary>

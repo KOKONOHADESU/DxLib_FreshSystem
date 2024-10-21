@@ -146,6 +146,8 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DATReader.h" />
+    <ClInclude Include="DATWriter.h" />
     <ClInclude Include="FreshLib\DxLibFontFresh.h" />
     <ClInclude Include="FreshLib\CSVCommon.h" />
     <ClInclude Include="FreshLib\CSVReader.h" />
