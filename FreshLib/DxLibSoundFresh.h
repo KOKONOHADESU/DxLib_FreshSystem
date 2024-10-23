@@ -10,7 +10,7 @@
 /// <summary>
 /// サウンド関連
 /// </summary>
-namespace Sound
+namespace SOUND
 {
     /// <summary>
     /// DxLIbのサウンドシステムを改良する

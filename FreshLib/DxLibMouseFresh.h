@@ -14,7 +14,7 @@ namespace
 /// <summary>
 /// マウス関連
 /// </summary>
-namespace Mouse
+namespace MOUSE
 {
 	/// <summary>
 	/// パッド処理
@@ -77,8 +77,6 @@ namespace Mouse
 		/// <returns           >true : 押している , false : 押していない</returns>
 		bool IsTrigger(int mouseNo)
 		{
-			m_isTrigger = false;
-
 			// 指定のキー入力の判定をする
 			if ((GetMouseInput() & mouseNo))
 			{
@@ -88,7 +86,7 @@ namespace Mouse
 				// 指定したフレームの時に処理をする
 				if (m_pressFrameCount == kMouseTriggerFrameCount)
 				{
-					m_isTrigger = true;
+					return true;
 				}
 			}
 			else
@@ -97,7 +95,7 @@ namespace Mouse
 				m_pressFrameCount = 0;
 			}
 
-			return m_isTrigger;
+			return false;
 		}
 		
 		/// <summary>

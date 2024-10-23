@@ -137,6 +137,8 @@ namespace DAT
 			{
 				return it->second.data;
 			}
+
+			return V();
 		}
 
 	private:

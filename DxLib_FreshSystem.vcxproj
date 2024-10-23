@@ -155,6 +155,7 @@
     <ClInclude Include="FreshLib\CSVWriter.h" />
     <ClInclude Include="FreshLib\DxLibGraphicFresh.h" />
     <ClInclude Include="FreshLib\DxLibKeyFresh.h" />
+    <ClInclude Include="FreshLib\DxLibKeyStrokeSlide.h" />
     <ClInclude Include="FreshLib\DxLibSoundFresh.h" />
     <ClInclude Include="FreshLib\SingletonBase.h" />
     <ClInclude Include="FreshLib\Vec2.h" />

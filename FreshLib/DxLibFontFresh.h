@@ -171,6 +171,8 @@ namespace Font
 			{
 				return it->second.handle;
 			}
+
+			return -1;
 		}
 
 	private:

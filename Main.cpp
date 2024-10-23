@@ -8,6 +8,7 @@
 #include "FreshLib/MTRandom.h"
 #include "FreshLib/DATWriter.h"
 #include "FreshLib/DATReader.h"
+#include "FreshLib/DxLibKeyStrokeSlide.h"
 
 #include <DxLib.h>
 #include <crtdbg.h>
@@ -49,16 +50,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         int b;
         const char* name;
     };
-    using DxSound   = Sound  ::DxLibSoundFresh<int, int>;
-    using DxGraph   = Graphic::DxLibGraphicFresh<int, int>;
-    using DxKey     = Key    ::DxLibKeyFresh;
-    using DxMouse   = Mouse  ::DxLibMouseFresh;
-    using CSVReader = CSV    ::CSVReader<int, int>;
-    using CSVWriter = CSV    ::CSVWriter;
-    using DATReader = DAT    ::DATReader<int, int, SaveDat>;
-    using DATWriter = DAT    ::DATWriter<SaveDat>;
-    using MTRand    = Rand   ::MTRandom;
-    using DxFont    = Font   ::DxLibFontFresh<int, int>;
+    using DxSound    = SOUND  ::DxLibSoundFresh<int, int>;
+    using DxGraph    = Graphic::DxLibGraphicFresh<int, int>;
+    using DxKey      = KEY    ::DxLibKeyFresh;
+    using DxMouse    = MOUSE  ::DxLibMouseFresh;
+    using CSVReader  = CSV    ::CSVReader<int, int>;
+    using CSVWriter  = CSV    ::CSVWriter;
+    using DATReader  = DAT    ::DATReader<int, int, SaveDat>;
+    using DATWriter  = DAT    ::DATWriter<SaveDat>;
+    using MTRand     = Rand   ::MTRandom;
+    using DxFont     = Font   ::DxLibFontFresh<int, int>;
 
     // サウンド管理 //
     DxSound::GetInstance()->SoundFolderPath("Data/Sound/");
@@ -106,6 +107,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     DATReader::GetInstance()->DATFolderPath("Data/DAT/");
     DATReader::GetInstance()->Add(0, 0, "SaveData");
 
+    KEY::DxLibKeyStrokeSlide* pKeyStrokSlide = new KEY::DxLibKeyStrokeSlide(10, KEY_INPUT_W, KEY_INPUT_S, KEY_INPUT_SPACE);
+
     bool isButton = false;
     float rand = -1;
 
@@ -120,6 +123,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
         DxKey::GetInstance()->Update();
         DxMouse::GetInstance()->Update();
+        pKeyStrokSlide->Update();
 
         if (DxKey::GetInstance()->IsTrigger(KEY_INPUT_Z))
         {
@@ -137,7 +141,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         if (count++ > 60 * 1)
         {
             count = 0;
-            DxSound::GetInstance()->Play(0);
+        //    DxSound::GetInstance()->Play(0);
         }
 
         DxSound::GetInstance()->SceneInput(isButton);
@@ -159,6 +163,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
         DrawFormatString(0, 96, 0xffffff, "%d : %d : %s", DATReader::GetInstance()->GetData(0).a, DATReader::GetInstance()->GetData(0).b, DATReader::GetInstance()->GetData(0).name);
 
+        
+        DrawFormatString(0, 112, 0xffff00, "現在の選択番号 : %d , 選択結果 : %d", pKeyStrokSlide->GetSelect(), pKeyStrokSlide->GetResult());
         
 
 #endif

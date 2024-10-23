@@ -14,12 +14,12 @@ namespace
 }
 
 /// <summary>
-/// パッド関連
+/// キーボード関連
 /// </summary>
-namespace Key
+namespace KEY
 {
 	/// <summary>
-	/// パッド処理
+	/// キーボード処理
 	/// </summary>
 	class DxLibKeyFresh : public SingletonBase<DxLibKeyFresh>
 	{
@@ -32,7 +32,6 @@ namespace Key
 	private:
 		DxLibKeyFresh() :
 			m_keyBuf(),
-			m_isTrigger(false),
 			m_pressFrameCount(0)
 		{
 
@@ -40,7 +39,7 @@ namespace Key
 
 	public:
 		/// <summary>
-		/// パッドの入力状態取得
+		/// キーボードの入力状態取得
 		/// </summary>
 		void Update()
 		{
@@ -70,7 +69,6 @@ namespace Key
 		/// <returns           >true : 押している , false : 押していない</returns>
 		bool IsTrigger(int keyNo) 
 		{
-			m_isTrigger = false;
 			// 指定のキー入力の判定をする
 			if (m_keyBuf[keyNo])
 			{
@@ -80,7 +78,7 @@ namespace Key
 				// 指定したフレームの時に処理をする
 				if (m_pressFrameCount == kKeyTriggerFrameCount)
 				{
-					m_isTrigger = true;
+					return true;
 				}
 			}
 			else
@@ -89,15 +87,12 @@ namespace Key
 				m_pressFrameCount = 0;
 			}
 
-			return m_isTrigger;
+			return false;
 		}
 
 	private:
 		// キー用バッファ
 		char m_keyBuf[kKeyStateBuf]{};
-
-		// トリガー用判定を取る
-		bool m_isTrigger = false;
 
 		// 押している間のフレームカウント
 		int m_pressFrameCount = 0;

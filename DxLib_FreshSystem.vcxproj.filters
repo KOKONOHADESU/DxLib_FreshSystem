@@ -62,6 +62,9 @@
     <ClInclude Include="FreshLib\DATCommon.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="FreshLib\DxLibKeyStrokeSlide.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="DxFresh\DxLib_FreshSystem.vcxproj.user" />
