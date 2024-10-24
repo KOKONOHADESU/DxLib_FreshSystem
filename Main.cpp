@@ -49,6 +49,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         int a;
         int b;
         const char* name;
+        const char* state;
     };
     using DxSound    = SOUND  ::DxLibSoundFresh<int, int>;
     using DxGraph    = Graphic::DxLibGraphicFresh<int, int>;
@@ -99,6 +100,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         100,
         200,
         "名前",
+        "無能力",
     };
 
     DATWriter::GetInstance()->DATFolderPath("Data/DAT/");
@@ -161,7 +163,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         DrawFormatString(0, 64, 0xffff00, "%d", DxFont::GetInstance()->GetHandle(0));
         DrawFormatStringToHandle(0, 80, GetColor(255, 255, 0), DxFont::GetInstance()->GetHandle(0), "%d", DxFont::GetInstance()->GetHandle(0));
 
-        DrawFormatString(0, 96, 0xffffff, "%d : %d : %s", DATReader::GetInstance()->GetData(0).a, DATReader::GetInstance()->GetData(0).b, DATReader::GetInstance()->GetData(0).name);
+        DrawFormatString(0, 96, 0xffffff, "%d : %d : %s : %s", 
+            DATReader::GetInstance()->GetData(0).a,
+            DATReader::GetInstance()->GetData(0).b,
+            DATReader::GetInstance()->GetData(0).name,
+            DATReader::GetInstance()->GetData(0).state);
 
         
         DrawFormatString(0, 112, 0xffff00, "現在の選択番号 : %d , 選択結果 : %d", pKeyStrokSlide->GetSelect(), pKeyStrokSlide->GetResult());
@@ -183,6 +189,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         }
     }
 
+
     // メモリ解放
     DxSound  ::GetInstance()->Destroy();
     DxGraph  ::GetInstance()->Destroy();
@@ -194,6 +201,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     DxFont   ::GetInstance()->Destroy();
     DATWriter::GetInstance()->Destroy();
     DATReader::GetInstance()->Destroy();
+
+    delete pKeyStrokSlide;
 
     // ＤＸライブラリ使用の終了処理
     DxLib_End();
