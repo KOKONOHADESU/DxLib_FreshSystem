@@ -122,8 +122,7 @@ namespace KEY
 
 				// 選択ボタンを押した瞬間か
 				// 選択ボタンを押し続けている際に選択を変更する
-				if (m_selectFramesPressCount[SelectButton::UP] == 1 ||
-					m_selectUpSpeedFramePressCount[SelectButton::UP] > m_selectFrameMax[SelectButton::UP])
+				if (m_selectFramesPressCount[SelectButton::UP] == 1 || m_selectUpSpeedFramePressCount[SelectButton::UP] > m_selectFrameMax[SelectButton::UP])
 				{
 					// 選択を変更する
 					m_selectNo--;
@@ -170,8 +169,7 @@ namespace KEY
 
 				// 選択ボタンを押した瞬間か
 				// 選択ボタンを押し続けている際に選択を変更する
-				if (m_selectFramesPressCount[SelectButton::DOWN] == 1 ||
-					m_selectUpSpeedFramePressCount[SelectButton::DOWN] > m_selectFrameMax[SelectButton::DOWN])
+				if (m_selectFramesPressCount[SelectButton::DOWN] == 1 || m_selectUpSpeedFramePressCount[SelectButton::DOWN] > m_selectFrameMax[SelectButton::DOWN])
 				{
 					// 選択を変更する
 					m_selectNo++;

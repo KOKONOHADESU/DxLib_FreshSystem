@@ -185,7 +185,6 @@ namespace Graphic
 					// “¯‚¶ID‚ªŒ©‚Â‚©‚Á‚½‚çƒ‹[ƒv‚ğI—¹
 					return m_graphData[i].size;
 				}
-
 			}
 
 			return Vec2<float>(0.0f, 0.0f);

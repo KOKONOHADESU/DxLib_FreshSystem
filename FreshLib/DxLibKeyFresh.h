@@ -32,7 +32,10 @@ namespace KEY
 	private:
 		DxLibKeyFresh() :
 			m_keyBuf(),
-			m_pressFrameCount(0)
+			m_pressFrameCount(0),
+			m_isTrigger(false),
+			m_isPress(false),
+			m_isCheckOneNoPress(true)
 		{
 
 		}
@@ -52,49 +55,109 @@ namespace KEY
 		/// </summary>
 		/// <param name="keyNo">入力するキー                            </param>
 		/// <returns           >true : 押している , false : 押していない</returns>
-		bool IsPress(int keyNo) const
+		bool IsPress(const int keyNo) const
 		{
 			// 指定のキー入力の判定をする
 			if (m_keyBuf[keyNo])
 			{
 				return true;
 			}
+
+			printfDx("aiueo\n");
 			return false;
 		}
 
 		/// <summary>
 		/// トリガー判定
+		/// ボタンを押した場合に判定をとる
 		/// </summary>
 		/// <param name="keyNo">入力するキー                            </param>
 		/// <returns           >true : 押している , false : 押していない</returns>
-		bool IsTrigger(int keyNo) 
-		{
-			// 指定のキー入力の判定をする
+		bool IsTrigger(const int keyNo)
+		{			
+			// キーが押されている場合
 			if (m_keyBuf[keyNo])
 			{
-				// フレームカウント
+				// フレームカウントを進める
 				m_pressFrameCount++;
 
-				// 指定したフレームの時に処理をする
+				// 指定したフレームの時に一度だけトリガーを発生
 				if (m_pressFrameCount == kKeyTriggerFrameCount)
-				{
+				{								
 					return true;
 				}
 			}
 			else
 			{
-				// 押していない場合はフレームカウントをリセット
 				m_pressFrameCount = 0;
 			}
 
 			return false;
 		}
 
+
+
+		/// <summary>
+		/// リリース
+		/// ボタンを離した場合に入力をする
+		/// </summary>
+		/// <param name="keyNo">入力するキー                            </param>
+		/// <returns           >true : 押している , false : 押していない</returns>
+		bool IsRelease(const int keyNo)
+		{			
+			// 指定のキー入力の判定をする
+			if (m_keyBuf[keyNo])
+			{
+				// 長押し判定
+				m_isPress = true;
+				// 押していなかの確認
+				m_isCheckOneNoPress = false;
+			}
+			else
+			{
+				// 長押ししていない場合
+				m_isPress = false;
+			}
+
+			// 一度入力している場合、長押ししてない場合を確認
+			if (!m_isCheckOneNoPress && !m_isPress)
+			{
+				// リセット
+				m_isPress = false;
+				m_isCheckOneNoPress = true;
+
+				// 入力終了
+				return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// すべてのキー入力確認
+		/// </summary>
+		/// <returns></returns>
+		bool IsCheckHitKeyAll()
+		{
+			return CheckHitKeyAll();
+		}
+
 	private:
 		// キー用バッファ
-		char m_keyBuf[kKeyStateBuf]{};
+		char m_keyBuf[kKeyStateBuf];
 
 		// 押している間のフレームカウント
-		int m_pressFrameCount = 0;
+		int m_pressFrameCount;
+
+		// トリガー判定用
+		bool m_isTrigger;
+		bool m_isTriggered = false;
+
+		// リリース判定用
+		// 長押ししているか
+		bool m_isPress;
+
+		// 押していないかの確認を一度する
+		bool m_isCheckOneNoPress;
 	};
 }

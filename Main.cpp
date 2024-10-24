@@ -128,12 +128,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
             rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);            
             count = 60;
         }
-        if (DxMouse::GetInstance()->IsTrigger(MOUSE_INPUT_1))
-        {
-            isButton = !isButton;
-            rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);
-            count = 60;
-        }
+        //if (DxMouse::GetInstance()->IsTrigger(MOUSE_INPUT_1))
+        //{
+        //    isButton = !isButton;
+        //    rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);
+        //    count = 60;
+        //}
+        //if (DxKey::GetInstance()->IsRelease(KEY_INPUT_Q))
+        //{
+        //    printfDx("リリースボタン確認\n");
+        //}
 
         if (count++ > 60 * 1)
         {
@@ -165,7 +169,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
             DATReader::GetInstance()->GetData(0).state);
 
         
-        DrawFormatString(0, 112, 0xffff00, "現在の選択番号 : %d , 選択結果 : %d", pKeyStrokSlide->GetSelect(), pKeyStrokSlide->GetResult());
+     //   DrawFormatString(0, 112, 0xffff00, "現在の選択番号 : %d , 選択結果 : %d", pKeyStrokSlide->GetSelect(), pKeyStrokSlide->GetResult());
         
 
 #endif
@@ -198,6 +202,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     DATReader::GetInstance()->Destroy();
 
     delete pKeyStrokSlide;
+    pKeyStrokSlide = nullptr;
 
     // ＤＸライブラリ使用の終了処理
     DxLib_End();
