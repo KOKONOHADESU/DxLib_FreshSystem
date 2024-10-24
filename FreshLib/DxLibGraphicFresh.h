@@ -82,23 +82,15 @@ namespace Graphic
 			// 画像パスの記録
 			data.graphPath = m_folderPath + filePath + extension;
 
-			// 複数のシーンで画像を使用する場合
-			if (isNoEnd)
-			{
-				// 画像のロード
-				data.handle = LoadGraph(data.graphPath.c_str());
-			}
-			else
-			{
-				// ここではまだ画像ロードしない
-				data.handle = -1;
-			}
+			// ここではまだ画像ロードしない
+			data.handle = -1;
 		
 			// 使用するシーン
 			data.scene = scene;
 
 			// 画像のサイズを取得
-			GetGraphSizeF(data.handle, &data.size.x, &data.size.y);
+			data.size.x = 0.0f;
+			data.size.y = 0.0f;
 
 			// 複数のシーンで使用するかどうか
 			data.isNoEnd = isNoEnd;
@@ -187,14 +179,16 @@ namespace Graphic
 				// 同じIDを探す
 				if (m_graphData[i].id == id)
 				{
+					// サイズを取得
+					GetGraphSizeF(m_graphData[i].handle, &m_graphData[i].size.x, &m_graphData[i].size.y);
+
 					// 同じIDが見つかったらループを終了
-					size = m_graphData[i].size;
-					break;
+					return m_graphData[i].size;
 				}
 
 			}
 
-			return size;
+			return Vec2<float>(0.0f, 0.0f);
 		}
 
 	private:

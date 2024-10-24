@@ -65,7 +65,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     // ƒTƒEƒ“ƒhŠÇ— //
     DxSound::GetInstance()->SoundFolderPath("Data/Sound/");
     DxSound::GetInstance()->Add(0, 0, "Sound1", ".mp3");
-    DxSound::GetInstance()->SceneInput(0);
     DxSound::GetInstance()->Volume(0, 255);
     DxSound::GetInstance()->Play(0);
 
@@ -73,14 +72,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     DxGraph::GetInstance()->GraphicFolderPath("Data/Image/");
     DxGraph::GetInstance()->Add(0, 0, "a", ".png");
     DxGraph::GetInstance()->GetSize(0);
-    DxGraph::GetInstance()->SceneInput(0);
     DrawGraph(0, 0, DxGraph::GetInstance()->GetHandle(0), true);
 
     // CSV“Ç‚İ‚İ //
     CSVReader::GetInstance()->CSVFolderPath("Data/CSV/");
     CSVReader::GetInstance()->Add(0,0, "rrr", 1);
-    CSVReader::GetInstance()->Add(1,0, "SaveData", 1);
-    CSVReader::GetInstance()->SceneInput(0);
 
     // CSV‘‚«‚İ //
     std::vector<std::vector<std::string>> data =
@@ -93,7 +89,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
     DxFont::GetInstance()->FontFolderPath("Data/Font/");
     DxFont::GetInstance()->Add(0, 0, "NikkyouSans-mLKax", ".ttf", "Nikkyou Sans");
-    DxFont::GetInstance()->SceneInput(0);
 
     SaveDat datDatas
     {
@@ -147,7 +142,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         }
 
         DxSound::GetInstance()->SceneInput(isButton);
-        DxGraph::GetInstance()->SceneInput(isButton);        
+        DxGraph::GetInstance()->SceneInput(isButton);
         CSVReader::GetInstance()->SceneInput(isButton);
         DxSound::GetInstance()->SceneInput(isButton);
         DxFont::GetInstance()->SceneInput(isButton);
