@@ -120,7 +120,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
         DxKey::GetInstance()->Update();
         DxMouse::GetInstance()->Update();
-        pKeyStrokSlide->Update();
+       // pKeyStrokSlide->Update();
 
         if (DxKey::GetInstance()->IsTrigger(KEY_INPUT_Z))
         {
