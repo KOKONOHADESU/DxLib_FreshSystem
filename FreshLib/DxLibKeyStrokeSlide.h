@@ -24,10 +24,12 @@ namespace KEY
 		/// <summary>
 		/// コンストラクタで入力スライドの設定をする
 		/// </summary>
-		/// <param name="selectMaxNum"   >選択できる最大数                    </param>
-		/// <param name="keyStrokeDirOne">スライドするためのキーを設定マイナス</param>
-		/// <param name="keyStrokeDirTow">スライドするためのキーを設定プラス  </param>
-		DxLibKeyStrokeSlide(const int selectMaxNum, const int keyStrokeDirOne, const int keyStrokeDirTow , const int keyCheckSelect):
+		/// <param name="selectMaxNum"     >選択できる最大数                    </param>
+		/// <param name="keyStrokeDirOne"  >スライドするためのキーを設定マイナス</param>
+		/// <param name="keyStrokeDirTow"  >スライドするためのキーを設定プラス  </param>
+		/// <param name="kSelectDelayFrame">長押しで変更する際の変更フレーム    </param>
+		/// <param name="kSelectMinFrame"  >キー入力後の変更フレーム            </param>
+		DxLibKeyStrokeSlide(const int selectMaxNum, const int keyStrokeDirOne, const int keyStrokeDirTow , const int keyCheckSelect, const int kSelectDelayFrame = kSelectFrameMax , const int kSelectMinFrame = kSelectFrameMin):
 			m_selectNo(0),
 			m_selectNoResult(-1),
 			m_selectMaxNum(selectMaxNum),
