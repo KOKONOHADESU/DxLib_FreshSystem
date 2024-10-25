@@ -33,9 +33,11 @@ public:
 			m_pInstance = nullptr;
 		}
 	}
+
 protected:
 	SingletonBase() {};
 	virtual ~SingletonBase() {};
+
 private:
 	// コピーコンストラクタの禁止
 	SingletonBase(const SingletonBase&) = delete;
@@ -43,6 +45,7 @@ private:
 
 	// シングルトン用ポインタ
 	static T* m_pInstance;
+
 };
 // インスタンスの実体化
 template <typename T> T* SingletonBase<T>::m_pInstance;
