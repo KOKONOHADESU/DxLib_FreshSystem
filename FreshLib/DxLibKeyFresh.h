@@ -33,7 +33,6 @@ namespace KEY
 		DxLibKeyFresh() :
 			m_keyBuf(),
 			m_pressFrameCount(0),
-			m_isTrigger(false),
 			m_isPress(false),
 			m_isCheckOneNoPress(true)
 		{
@@ -63,7 +62,6 @@ namespace KEY
 				return true;
 			}
 
-			printfDx("aiueo\n");
 			return false;
 		}
 
@@ -71,9 +69,10 @@ namespace KEY
 		/// トリガー判定
 		/// ボタンを押した場合に判定をとる
 		/// </summary>
-		/// <param name="keyNo">入力するキー                            </param>
+		/// <param name="keyNo"          >入力するキー                            </param>
+		/// <param name="delayInputFrame">入力にディレイフレームを指定する        </param>
 		/// <returns           >true : 押している , false : 押していない</returns>
-		bool IsTrigger(const int keyNo)
+		bool IsTrigger(const int keyNo , const int delayInputFrame = kKeyTriggerFrameCount)
 		{			
 			// キーが押されている場合
 			if (m_keyBuf[keyNo])
@@ -82,7 +81,7 @@ namespace KEY
 				m_pressFrameCount++;
 
 				// 指定したフレームの時に一度だけトリガーを発生
-				if (m_pressFrameCount == kKeyTriggerFrameCount)
+				if (m_pressFrameCount == delayInputFrame)
 				{								
 					return true;
 				}
@@ -148,10 +147,6 @@ namespace KEY
 
 		// 押している間のフレームカウント
 		int m_pressFrameCount;
-
-		// トリガー判定用
-		bool m_isTrigger;
-		bool m_isTriggered = false;
 
 		// リリース判定用
 		// 長押ししているか

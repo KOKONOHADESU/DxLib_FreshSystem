@@ -121,6 +121,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         DxKey::GetInstance()->Update();
         DxMouse::GetInstance()->Update();
        // pKeyStrokSlide->Update();
+        float no = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);
 
         if (DxKey::GetInstance()->IsTrigger(KEY_INPUT_Z))
         {
@@ -128,16 +129,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
             rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);            
             count = 60;
         }
-        //if (DxMouse::GetInstance()->IsTrigger(MOUSE_INPUT_1))
-        //{
-        //    isButton = !isButton;
-        //    rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);
-        //    count = 60;
-        //}
-        //if (DxKey::GetInstance()->IsRelease(KEY_INPUT_Q))
-        //{
-        //    printfDx("リリースボタン確認\n");
-        //}
+        if (DxMouse::GetInstance()->IsTrigger(MOUSE_INPUT_1))
+        {
+            isButton = !isButton;
+            rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);
+            count = 60;
+        }
+        if (DxKey::GetInstance()->IsRelease(KEY_INPUT_Q))
+        {
+            printfDx("リリースボタン確認\n");
+        }
 
         if (count++ > 60 * 1)
         {
