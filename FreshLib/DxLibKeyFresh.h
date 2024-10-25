@@ -122,14 +122,23 @@ namespace KEY
 			if (!m_isCheckOneNoPress && !m_isPress)
 			{
 				// リセット
-				m_isPress = false;
-				m_isCheckOneNoPress = true;
+				ReleaseReset();
 
 				// 入力終了
 				return true;
 			}
 
 			return false;
+		}
+
+		/// <summary>
+		/// リリースボタンのリセット
+		/// </summary>
+		void ReleaseReset()
+		{
+			// リセット
+			m_isPress           = false;
+			m_isCheckOneNoPress = true;
 		}
 
 		/// <summary>

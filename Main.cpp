@@ -66,13 +66,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     DxSound::GetInstance()->SoundFolderPath("Data/Sound/");
     DxSound::GetInstance()->Add(0, 0, "Sound1", ".mp3");
     DxSound::GetInstance()->Volume(0, 255);
-    DxSound::GetInstance()->Play(0);
 
     // 画像管理 //
     DxGraph::GetInstance()->GraphicFolderPath("Data/Image/");
     DxGraph::GetInstance()->Add(0, 0, "a", ".png");
     DxGraph::GetInstance()->GetSize(0);
-    DrawGraph(0, 0, DxGraph::GetInstance()->GetHandle(0), true);
 
     // CSV読み込み //
     CSVReader::GetInstance()->CSVFolderPath("Data/CSV/");
@@ -120,32 +118,30 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
         DxKey::GetInstance()->Update();
         DxMouse::GetInstance()->Update();
-       // pKeyStrokSlide->Update();
-        float no = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);
+       // pKeyStrokSlide->Update();        
 
-        if (DxKey::GetInstance()->IsTrigger(KEY_INPUT_Z))
-        {
-            isButton = !isButton;
-            rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);            
-            count = 60;
-        }
         if (DxMouse::GetInstance()->IsTrigger(MOUSE_INPUT_1))
         {
             isButton = !isButton;
             rand = MTRand::GetInstance()->GetMTRand(0.0f, 100.0f);
             count = 60;
         }
+        if (DxKey::GetInstance()->IsTrigger(KEY_INPUT_Z))
+        {
+            printfDx("トリガーボタン確認\n");
+        }
         if (DxKey::GetInstance()->IsRelease(KEY_INPUT_Q))
         {
             printfDx("リリースボタン確認\n");
         }
 
+#if false
         if (count++ > 60 * 1)
         {
             count = 0;
-        //    DxSound::GetInstance()->Play(0);
+            DxSound::GetInstance()->Play(0);
         }
-
+#endif
         DxSound::GetInstance()->SceneInput(isButton);
         DxGraph::GetInstance()->SceneInput(isButton);
         CSVReader::GetInstance()->SceneInput(isButton);
