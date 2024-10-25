@@ -37,7 +37,7 @@ namespace Rand
 		T GetMTRand(T randMin, T randMax)
 		{
 			// メルセンヌツイスタで乱数の範囲を設定
-			std::uniform_int_distribution<> distrib(randMin, randMax);
+			std::uniform_real_distribution<> distrib(randMin, randMax);			
 
 			// 範囲でしたいした値をランダムで返す
 			return static_cast<T>(distrib(m_randGenerator));
