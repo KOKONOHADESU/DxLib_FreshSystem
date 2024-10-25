@@ -89,7 +89,7 @@ public:
 	//ê≥ãKâª Vec2 = Vec2.normalize()
 	Vec2 Normalize()
 	{
-		T len = Length();
+		const T len = Length();
 		if (len == 0)
 		{
 			return *this;
