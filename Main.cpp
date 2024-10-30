@@ -69,7 +69,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
     // ‰æ‘œŠÇ— //
     DxGraph::GetInstance()->GraphicFolderPath("Data/Image/");
-
+    
     DxGraph::GetInstance()->Add(0, 0, "a", ".png");
     DxGraph::GetInstance()->GetSize(0);
 

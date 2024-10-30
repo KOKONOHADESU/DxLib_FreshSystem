@@ -157,22 +157,13 @@ namespace Font
 		}
 
 		/// <summary>
-		/// 画像ハンドルを渡す
+		/// ハンドルを渡す
 		/// </summary>
 		/// <param name="id">ID            </param>
 		/// <returns        >ハンドルデータ</returns>
 		int GetHandle(const U& id)
 		{
-			// マップからIDに対応するフォントデータを検索
-			auto it = m_font.find(id);
-
-			// IDが見つかったらハンドルを返す、見つからなかったら -1 を返す
-			if (it != m_font.end())
-			{
-				return it->second.handle;
-			}
-
-			return -1;
+			return m_font[id].handle;			
 		}
 
 		/// <summary>

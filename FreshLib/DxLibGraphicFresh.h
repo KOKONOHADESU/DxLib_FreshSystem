@@ -116,6 +116,7 @@ namespace Graphic
 				{
 					// 読み込み
 					graphicData.handle = LoadGraph(graphicData.graphPath.c_str());
+					GetGraphSizeF(graphicData.handle, &graphicData.size.x, &graphicData.size.y);
 
 					// 読み込み失敗したら
 					if (graphicData.handle == -1) return;
@@ -145,15 +146,7 @@ namespace Graphic
 		/// <returns        >ハンドルデータ</returns>
 		int GetHandle(const U& id)
 		{
-			// IDに対応するデータを検索
-			auto it = m_graphData.find(id);
-
-			if (it != m_graphData.end())
-			{
-				return it->second.handle;
-			}
-
-			return -1;			
+			return m_graphData[id].handle;				
 		}
 
 		/// <summary>
@@ -163,8 +156,6 @@ namespace Graphic
 		/// <returns        >サイズを渡す</returns>
 		Vec2<float> GetSize(const U& id)
 		{					
-			GetGraphSizeF(m_graphData[id].handle, &m_graphData[id].size.x, &m_graphData[id].size.y);
-
 			return m_graphData[id].size;
 		}
 
