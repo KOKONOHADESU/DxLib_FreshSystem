@@ -175,6 +175,36 @@ namespace Font
 			return -1;
 		}
 
+		/// <summary>
+		/// 配列確認
+		/// </summary>
+		/// <returns>配列の数を渡す</returns>
+		int GetArrayNum()
+		{
+			return static_cast<int>(m_font.size());
+		}
+
+		/// <summary>
+		/// 読み込んでいるフォントの数を渡す
+		/// </summary>
+		/// <returns>読み込んでいるフォントの数</returns>
+		int GetHandleNum()
+		{
+			int fontNum = 0;
+			for (auto& font : m_font)
+			{
+				// secondでアクセス
+				FontData& fontData = font.second;
+
+				if (fontData.handle != -1)
+				{
+					fontNum++;
+				}
+			}
+
+			return fontNum;
+		}
+
 	private:
 		// フォント管理データ
 		std::map<T, FontData> m_font;

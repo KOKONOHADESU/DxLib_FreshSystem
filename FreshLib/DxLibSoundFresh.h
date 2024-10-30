@@ -111,8 +111,8 @@ namespace SOUND
             // すべての画像データを確認
             for (int i = 0; i < m_soundType.size(); i++)
             {
-                // 特定の画像データを確認
-                // 画像ロードしていないデータを確認
+                // 特定のデータを確認
+                // ロードしていないデータを確認
                 if (m_soundType[i].scene == scene && m_soundType[i].handle == -1)
                 {
                     // サウンドのロード

@@ -25,8 +25,7 @@ namespace Graphic
 	private:
 		// 画像データ
 		struct GrahicData
-		{
-			U id{};                // ID
+		{			
 			std::string graphPath; // 画像パス
 			int handle = -1;       // 画像データ
 			Vec2<float> size;      // 画像サイズ
@@ -76,9 +75,6 @@ namespace Graphic
 			// データ取得用
 			GrahicData data{};
 
-			// IDの記録
-			data.id = id;
-
 			// 画像パスの記録
 			data.graphPath = m_folderPath + filePath + extension;
 
@@ -96,7 +92,7 @@ namespace Graphic
 			data.isNoEnd = isNoEnd;
 
 			// 画像の追加
-			m_graphData.push_back(data);
+			m_graphData[id] = data;
 
 			// 読み込み成功したら
 			return true;
@@ -108,35 +104,38 @@ namespace Graphic
 		/// <param name="scene">現在のシーン</param>
 		void SceneInput(const T& scene)
 		{
-			// すべての画像データを確認
-			for (int i = 0; i < m_graphData.size(); i++)
-			{		
-				// 特定の画像データを確認
-				// 画像ロードしていないデータを確認
-				if (m_graphData[i].scene == scene && m_graphData[i].handle == -1)
+			// すべてのデータを確認
+			for (auto& graphic : m_graphData)
+			{
+				// secondでFontDataにアクセス
+				GrahicData& graphicData = graphic.second;
+
+				// 特定のデータを確認
+				// ロードしていないデータを確認
+				if (graphicData.scene == scene && graphicData.handle == -1)
 				{
-					// 画像のロード
-					m_graphData[i].handle = LoadGraph(m_graphData[i].graphPath.c_str());
+					// 読み込み
+					graphicData.handle = LoadGraph(graphicData.graphPath.c_str());
 
 					// 読み込み失敗したら
-					if (m_graphData[i].handle == -1)continue;
+					if (graphicData.handle == -1) return;
 
 					continue;
 				}
-				// 他シーンで使用する画像の場合
-				else if (m_graphData[i].scene != scene && !m_graphData[i].isNoEnd)
+				// 他シーンで使用する場合
+				else if (graphicData.scene != scene && !graphicData.isNoEnd)
 				{
-					// 画像データが入っていた場合
-					if (m_graphData[i].handle != -1)
-					{					
-						// メモリの解放
-						DeleteGraph(m_graphData[i].handle);
-						m_graphData[i].handle = -1;
+					// データが入っていた場合
+					if (graphicData.handle != -1)
+					{
+						// 解放処理
+						DeleteGraph(graphicData.handle);
+						graphicData.handle = -1;
 
 						continue;
 					}
 				}
-			}			
+			}
 		}
 
 		/// <summary>
@@ -146,22 +145,15 @@ namespace Graphic
 		/// <returns        >ハンドルデータ</returns>
 		int GetHandle(const U& id)
 		{
-			int handle = -1;
+			// IDに対応するデータを検索
+			auto it = m_graphData.find(id);
 
-			// すべての画像を確認
-			for (int i = 0; i < m_graphData.size(); i++)
+			if (it != m_graphData.end())
 			{
-				// 同じIDを探す
-				if (m_graphData[i].id == id)
-				{
-					// 同じIDが見つかったらループを終了
-					handle = m_graphData[i].handle;
-					break;
-				}
-				
+				return it->second.handle;
 			}
 
-			return handle;
+			return -1;			
 		}
 
 		/// <summary>
@@ -170,29 +162,45 @@ namespace Graphic
 		/// <param name="id">画像ID      </param>
 		/// <returns        >サイズを渡す</returns>
 		Vec2<float> GetSize(const U& id)
+		{					
+			GetGraphSizeF(m_graphData[id].handle, &m_graphData[id].size.x, &m_graphData[id].size.y);
+
+			return m_graphData[id].size;
+		}
+
+		/// <summary>
+		/// 配列確認
+		/// </summary>
+		/// <returns>配列の数を渡す</returns>
+		int GetArrayNum()
 		{
-			Vec2<float> size = Vec2<float>(0.0f,0.0f);
+			return static_cast<int>(m_graphData.size());
+		}
 
-			// すべての画像を確認
-			for (int i = 0; i < m_graphData.size(); i++)
+		/// <summary>
+		/// 読み込んでいる画像の数を渡す
+		/// </summary>
+		/// <returns>読み込んでいる画像の数</returns>
+		int GetHandleNum()
+		{
+			int graphicNum = 0;
+			for (auto& graphic : m_graphData)
 			{
-				// 同じIDを探す
-				if (m_graphData[i].id == id)
-				{
-					// サイズを取得
-					GetGraphSizeF(m_graphData[i].handle, &m_graphData[i].size.x, &m_graphData[i].size.y);
+				// secondでアクセス
+				GrahicData& graphicData = graphic.second;
 
-					// 同じIDが見つかったらループを終了
-					return m_graphData[i].size;
+				if (graphicData.handle != -1)
+				{
+					graphicNum++;
 				}
 			}
 
-			return Vec2<float>(0.0f, 0.0f);
+			return graphicNum;
 		}
 
 	private:
-		// 画像データ				
-		std::vector<GrahicData>m_graphData;
+		// 画像データ					
+		std::map<T, GrahicData>m_graphData;
 
 		// フォルダパス記録
 		std::string m_folderPath;
