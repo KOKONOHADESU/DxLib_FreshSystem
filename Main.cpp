@@ -166,7 +166,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
             DATReader::GetInstance()->GetData(0).name,
             DATReader::GetInstance()->GetData(0).state);
 
-        DrawFormatString(0, 122, 0xffffff, "画像のデータの数 %d : 画像読み込みの数 %d",
+        DrawFormatString(0, 122, 0xffffff, "画像のデータの数     %d : 画像読み込みの数     %d",
             DxGraph::GetInstance()->GetArrayNum(),
             DxGraph::GetInstance()->GetHandleNum());
 
