@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InputTextNameSelector.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +162,7 @@
     <ClInclude Include="FreshLib\Vec2.h" />
     <ClInclude Include="FreshLib\DxLibMouseFresh.h" />
     <ClInclude Include="FreshLib\MTRandom.h" />
+    <ClInclude Include="InputTextNameSelector.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DxFresh\DxLib_FreshSystem.vcxproj.user" />

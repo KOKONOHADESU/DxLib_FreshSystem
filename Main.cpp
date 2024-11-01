@@ -1,4 +1,4 @@
-#include "FreshLib/DxLibSoundFresh.h"
+ï»¿#include "FreshLib/DxLibSoundFresh.h"
 #include "FreshLib/DxLibGraphicFresh.h"
 #include "FreshLib/DxLibKeyFresh.h"
 #include "FreshLib/DxLibMouseFresh.h"
@@ -10,11 +10,15 @@
 #include "FreshLib/DATReader.h"
 #include "FreshLib/DxLibKeyStrokeSlide.h"
 
+#include "InputTextNameSelector.h"
+
 #include <DxLib.h>
 #include <crtdbg.h>
 #include <string>
+#include <codecvt>
 
-// ƒvƒƒOƒ‰ƒ€‚ÍWinMain‚©‚çn‚Ü‚è‚Ü‚·
+
+// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã¯WinMainã‹ã‚‰å§‹ã¾ã‚Šã¾ã™
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nShowCmd)
 {
 
@@ -22,25 +26,25 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif   
 
-    // windowƒ‚[ƒhİ’è
+    // windowãƒ¢ãƒ¼ãƒ‰è¨­å®š
     ChangeWindowMode(true);
 
-    // ƒEƒCƒ“ƒhƒE–¼İ’è
+    // ã‚¦ã‚¤ãƒ³ãƒ‰ã‚¦åè¨­å®š
     SetMainWindowText("FreshSystem");
 
-    // ‰æ–ÊƒTƒCƒY‚Ìİ’è
+    // ç”»é¢ã‚µã‚¤ã‚ºã®è¨­å®š
     SetGraphMode(1280, 720, 32);
 
-    // ƒƒOo—Í‚ğs‚¤‚©”Û‚©
+    // ãƒ­ã‚°å‡ºåŠ›ã‚’è¡Œã†ã‹å¦ã‹
     SetOutApplicationLogValidFlag(false);
 
-    // ƒ_ƒuƒ‹ƒoƒbƒtƒ@ƒ‚[ƒh
+    // ãƒ€ãƒ–ãƒ«ãƒãƒƒãƒ•ã‚¡ãƒ¢ãƒ¼ãƒ‰
     SetDrawScreen(DX_SCREEN_BACK);
 
-    // ‚c‚wƒ‰ƒCƒuƒ‰ƒŠ‰Šú‰»ˆ—
+    // ï¼¤ï¼¸ãƒ©ã‚¤ãƒ–ãƒ©ãƒªåˆæœŸåŒ–å‡¦ç†
     if (DxLib_Init() == -1)
     {
-        // ƒGƒ‰[‚ª‹N‚«‚½‚ç’¼‚¿‚ÉI—¹
+        // ã‚¨ãƒ©ãƒ¼ãŒèµ·ããŸã‚‰ç›´ã¡ã«çµ‚äº†
         return -1;
     }
 
@@ -62,25 +66,25 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     using MTRand     = Rand   ::MTRandom;
     using DxFont     = Font   ::DxLibFontFresh<int, int>;
 
-    // ƒTƒEƒ“ƒhŠÇ— //
+    // ã‚µã‚¦ãƒ³ãƒ‰ç®¡ç† //
     DxSound::GetInstance()->SoundFolderPath("Data/Sound/");
     DxSound::GetInstance()->Add(0, 0, "Sound1", ".mp3");
     DxSound::GetInstance()->Volume(0, 255);
 
-    // ‰æ‘œŠÇ— //
+    // ç”»åƒç®¡ç† //
     DxGraph::GetInstance()->GraphicFolderPath("Data/Image/");
     
     DxGraph::GetInstance()->Add(0, 0, "a", ".png");
     DxGraph::GetInstance()->GetSize(0);
 
-    // CSV“Ç‚İ‚İ //
+    // CSVèª­ã¿è¾¼ã¿ //
     CSVReader::GetInstance()->CSVFolderPath("Data/CSV/");
     CSVReader::GetInstance()->Add(0,0, "rrr", 1);
 
-    // CSV‘‚«‚İ //
+    // CSVæ›¸ãè¾¼ã¿ //
     std::vector<std::vector<std::string>> data =
     {
-        {"–¼‘O,ÅI’n“_,‘Ì—Í,“G1,“G2,“G3,“G4"},
+        {"åå‰,æœ€çµ‚åœ°ç‚¹,ä½“åŠ›,æ•µ1,æ•µ2,æ•µ3,æ•µ4"},
         {"name,japan,32,dead,dead,alive,aliveaaad"}
     };
     CSVWriter::GetInstance()->CSVFolderPath("Data/CSV/");
@@ -93,8 +97,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     {
         100,
         200,
-        "–¼‘O",
-        "–³”\—Í",
+        "åå‰",
+        "ç„¡èƒ½åŠ›",
     };
 
     DATWriter::GetInstance()->DATFolderPath("Data/DAT/");
@@ -105,18 +109,31 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
 
     KEY::DxLibKeyStrokeSlide* pKeyStrokSlide = new KEY::DxLibKeyStrokeSlide(10, KEY_INPUT_W, KEY_INPUT_S, KEY_INPUT_SPACE);
 
+    InputTextNameSelector* pText = new InputTextNameSelector();
+
     bool isButton = false;
     float rand = -1;
 
     int count = 0;
+    std::vector<std::string> t;
     while (ProcessMessage() == 0)
     {
         LONGLONG  time = GetNowHiPerformanceCount();
 
-        // ‰æ–Ê‚ÌƒNƒŠƒA
+        // ç”»é¢ã®ã‚¯ãƒªã‚¢
         ClearDrawScreen();
 #if true    
 
+    
+        std::vector<char> t;
+
+        char a = 'ã‚';
+        char n = 'ã‚“';
+        for (char c = a; c < n; ++c)
+        {
+            t.push_back(c);
+        }
+       
         DxKey::GetInstance()->Update();
         DxMouse::GetInstance()->Update();
        // pKeyStrokSlide->Update();        
@@ -129,11 +146,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
         }
         if (DxKey::GetInstance()->IsTrigger(KEY_INPUT_Z))
         {
-            printfDx("ƒgƒŠƒK[ƒ{ƒ^ƒ“Šm”F\n");
+            printfDx("ãƒˆãƒªã‚¬ãƒ¼ãƒœã‚¿ãƒ³ç¢ºèª\n");
         }
         if (DxKey::GetInstance()->IsRelease(KEY_INPUT_Q))
         {
-            printfDx("ƒŠƒŠ[ƒXƒ{ƒ^ƒ“Šm”F\n");
+            printfDx("ãƒªãƒªãƒ¼ã‚¹ãƒœã‚¿ãƒ³ç¢ºèª\n");
         }
 
 #if false
@@ -166,36 +183,36 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
             DATReader::GetInstance()->GetData(0).name,
             DATReader::GetInstance()->GetData(0).state);
 
-        DrawFormatString(0, 122, 0xffffff, "‰æ‘œ‚Ìƒf[ƒ^‚Ì”     %d : ‰æ‘œ“Ç‚İ‚İ‚Ì”     %d",
+        DrawFormatString(0, 122, 0xffffff, "ç”»åƒã®ãƒ‡ãƒ¼ã‚¿ã®æ•°     %d : ç”»åƒèª­ã¿è¾¼ã¿ã®æ•°     %d",
             DxGraph::GetInstance()->GetArrayNum(),
             DxGraph::GetInstance()->GetHandleNum());
 
-        DrawFormatString(0, 138, 0xffffff, "ƒtƒHƒ“ƒg‚Ìƒf[ƒ^‚Ì” %d : ƒtƒHƒ“ƒg“Ç‚İ‚İ‚Ì” %d",
+        DrawFormatString(0, 138, 0xffffff, "ãƒ•ã‚©ãƒ³ãƒˆã®ãƒ‡ãƒ¼ã‚¿ã®æ•° %d : ãƒ•ã‚©ãƒ³ãƒˆèª­ã¿è¾¼ã¿ã®æ•° %d",
             DxFont::GetInstance()->GetArrayNum(),
             DxFont::GetInstance()->GetHandleNum());
 
         
-     //   DrawFormatString(0, 112, 0xffff00, "Œ»İ‚Ì‘I‘ğ”Ô† : %d , ‘I‘ğŒ‹‰Ê : %d", pKeyStrokSlide->GetSelect(), pKeyStrokSlide->GetResult());
+     //   DrawFormatString(0, 112, 0xffff00, "ç¾åœ¨ã®é¸æŠç•ªå· : %d , é¸æŠçµæœ : %d", pKeyStrokSlide->GetSelect(), pKeyStrokSlide->GetResult());
         
 
 #endif
-        // — ‰æ–Ê‚ğ•\‰æ–Ê‚ğ“ü‚ê‘Ö‚¦‚é
+        // è£ç”»é¢ã‚’è¡¨ç”»é¢ã‚’å…¥ã‚Œæ›¿ãˆã‚‹
         ScreenFlip();
 
-        // escƒL[‚ğ‰Ÿ‚µ‚½‚çI—¹‚·‚é
+        // escã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã‚‰çµ‚äº†ã™ã‚‹
         if (CheckHitKey(KEY_INPUT_ESCAPE))
         {
             break;
         }
 
-        // fps‚ğ60‚ÉŒÅ’è
+        // fpsã‚’60ã«å›ºå®š
         while (GetNowHiPerformanceCount() - time < 16667)
         {
         }
     }
 
 
-    // ƒƒ‚ƒŠ‰ğ•ú
+    // ãƒ¡ãƒ¢ãƒªè§£æ”¾
     DxSound  ::GetInstance()->Destroy();
     DxGraph  ::GetInstance()->Destroy();
     DxKey    ::GetInstance()->Destroy();
@@ -210,9 +227,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, 
     delete pKeyStrokSlide;
     pKeyStrokSlide = nullptr;
 
-    // ‚c‚wƒ‰ƒCƒuƒ‰ƒŠg—p‚ÌI—¹ˆ—
+    // ï¼¤ï¼¸ãƒ©ã‚¤ãƒ–ãƒ©ãƒªä½¿ç”¨ã®çµ‚äº†å‡¦ç†
     DxLib_End();
 
-    // ƒ\ƒtƒg‚ÌI—¹ 
+    // ã‚½ãƒ•ãƒˆã®çµ‚äº† 
     return 0;
 }
